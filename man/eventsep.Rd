@@ -98,8 +98,6 @@ Important note: If a double-peaked or an overlaid event occurs, the whole event 
 }
 
 \examples{
-install.packages("X:/SPATE/R Package FloodR/FloodR_0.1.0.tar.gz", repos=NULL, type="source")
-library(FloodR)
 dailyMQ<-data.frame(Date=seq(from=as.Date("01.01.2000", format="\%d.\%m.\%Y"),
 to=as.Date("01.01.2004", format="\%d.\%m.\%Y"), by="days"),
 discharge=rbeta(1462,2,20)*100)
