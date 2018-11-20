@@ -1,0 +1,52 @@
+\name{PrectwoCP}
+\alias{PrectwoCP}
+
+\title{
+Determine the begin of event precipitation
+}
+\description{
+The cumulative precipitation is used to estimate the begin of the event precipitation using a change point estimation. For this, the time series is divided into three subsamples and the slope is estimated for each subsample using linear regression and least squares estimation. This is done for all possible combinations of three consecutive subsamples, such that the change point can be estimated as the point where the maximum difference between the slopes of the first two subsamples occurs.
+}
+\usage{
+PrectwoCP(X,indT,s_p=4,min_step=3)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{X}{
+A dataframe with the first column equal to the date (d.m.Y) and the second column consisting of the daily precipitation sums [mm].
+}
+\item{indT}{
+An integer vector with three entries: first the index of date in X of the begin of the flood event, second the index of date in X of the end of the flood event and third the index of the date in X of the peak of the flood event.
+}
+\item{s_p}{
+Integer that gives the number of days after the peak that are considered in the estimation of the slope, by default set to 4 days.
+}
+\item{min_step}{
+The minimum required number of data points used for the linear regression to determine the slope. By default it is set to 3 days and it is recommended to use no shorter length.
+}
+}
+\details{
+
+ Since pre-floods and pre-event precipitation often causes falsified starting point, the estimated begin with the one-change-point-method (function PreconeCP) is extended with a begin estimated by a twofold change-point consideration. For this, the precipitation time series is splitted into three sub-sequences. The first point where the cumulative precipitation is splitted has to be located before the flood peak and the second point after the peak. Then the points, for which the differences between the slopes of the first and the second as well as the second and the third part are maximal, are chosen as change points. The begin of the event precipitation then is defined as the first of these two change points.
+
+}
+\value{
+A date that indicates the estimated begin of the event precipitation.
+}
+
+\author{
+Philipp Bühler
+}
+
+\examples{
+dailyprec<-data.frame(Date=seq(from=as.Date("01.01.2000", format="\%d.\%m.\%Y"),
+to=as.Date("30.04.2000", format="\%d.\%m.\%Y"), by="days"),
+discharge=rbeta(121,2,20)*100)
+indT<-c(15,30,14+which.max(dailyprec[15:30,2]))
+
+PrectwoCP(X=dailyprec,indT)
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ ~ts }% use one of  RShowDoc("KEYWORDS")
+\keyword{ ~classif }% __ONLY ONE__ keyword per line
