@@ -1,6 +1,6 @@
 Package: FloodR
 Type: Package
-Title: Separation of Flood Event and Separation of Event Precipitation/Temperature
+Title: Separation of Flood Event and Event Precipitation
 Version: 0.1.0
 Authors@R: c(person("Philipp", "Buehler", email = "philipp.buehler@rub.de",role = c("aut", "cre")), person("Svenja", "Fischer", email = "svenja.fischer@rub.de",role = c("aut")), person("Laura", "Haendel", email = "laura.haendel@rub.de",role = c("aut")))
 Maintainer: Philipp Buehler <philipp.buehler@rub.de>
