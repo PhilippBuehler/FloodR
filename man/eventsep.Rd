@@ -8,7 +8,7 @@ Flood event separation based on variance
 Based on daily mean discharges, a window-variance is calculated. If this variance exceeds a certain threshold, a flood event has been detected. To determine the begin of the flood event, the lag 1 differences are considered. The point, where the differences are positive for the last time before the variance exceeds the threshold, is defined as the starting point (including natural variability). The end of the flood event is defined as the point where the sum of the rising limb of the event equals approximately the sum of the falling limb.
 }
 \usage{
-eventsep(dailyMQ,monthlyHQ,dvar,sharevar, durday, usemed, medbf=0.5)
+eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,11 +21,20 @@ eventsep(dailyMQ,monthlyHQ,dvar,sharevar, durday, usemed, medbf=0.5)
 \item{dvar}{
   integer: The window length of the moving variance in days. By default, it is set to three days.
 }
-\item{sharevar}{
-  numeric: The proportion of the sample variance of the dvar-day-window variance on the threshold. By default it is set to sharevar=0.25.
+\item{theta}{
+  numeric: The proportion of the sample variance of the dvar-day-window variance on the threshold. By default it is set to theta=0.25.
 }
-\item{durday}{
-  integer: The approximate minimum length of an overlaid event in days. By default it is set to durday=40.
+\item{ddur}{
+  integer: The approximate minimum length of an overlaid event in days. By default it is set to ddur=40.
+}
+\item{Kappa}{
+  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to ddur=40.
+}
+\item{eta}{
+  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to ddur=40.
+}
+\item{delta}{
+  numeric: Threshold parameter for defining the end of a flood event. By default it is set to ddur=40.
 }
 \item{usemed}{
   logical: Should the median of relative difference between the baseflow at the end and the begin be considered to determine the end of the flood event.
