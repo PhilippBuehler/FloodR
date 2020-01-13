@@ -28,13 +28,13 @@ eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5)
   integer: The approximate minimum length of an overlaid event in days. By default it is set to ddur=40.
 }
 \item{Kappa}{
-  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to ddur=40.
+  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to Kappa=0.4.
 }
 \item{eta}{
-  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to ddur=40.
+  numeric: Threshold parameter for defining the begin of a flood event. By default it is set to eta=0.1.
 }
 \item{delta}{
-  numeric: Threshold parameter for defining the end of a flood event. By default it is set to ddur=40.
+  numeric: Threshold parameter for defining the end of a flood event. By default it is set to delta=0.2.
 }
 \item{usemed}{
   logical: Should the median of relative difference between the baseflow at the end and the begin be considered to determine the end of the flood event.
