@@ -1,6 +1,6 @@
 PKGENVIR <- new.env(parent=emptyenv())
 
-Run_WebFlood <- function(Discharge,Precipitation,Catchment_Properties,language="en")
+Run_WebFlood <- function(Discharge,Precipitation=NULL,Catchment_Properties=NULL,language="en")
 {
   PKGENVIR$language <- language
   PKGENVIR$Discharge <- Discharge
