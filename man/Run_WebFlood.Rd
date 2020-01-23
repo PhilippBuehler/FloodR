@@ -6,7 +6,7 @@ This shiny app opens a graphical web interface, in which floodevents are shown w
 
 }
 \usage{
-Run_WebFlood(Discharge,Precipitation,Catchment_Properties,language="en")
+Run_WebFlood(Discharge,Precipitation=NULL,Catchment_Properties=NULL,language="en")
 }
 
 \arguments{
@@ -20,8 +20,9 @@ Column 2: Meassured Data of Discharge
 
 The list entries need to be named after the catchment-identifier (eg. name)
 }
-[OPTIONAL]:
+
 \item{Precipitation}{
+[OPTIONAL]:
 A list of dataframes with the precipitation data. Each dataframe must contain the precipitation data for a specific catchment with two columns:
 
 Column 1: Date in a continious daily timeseries (R "date" format)
@@ -31,8 +32,9 @@ Column 2: Meassured Data of Precipitation
 The list entries need to be named after the catchment-identifier (eg. name)
 
 }
-[OPTIONAL]:
+
 \item{Catchment_Properties}{
+[OPTIONAL]:
 A dataframe with the properties for each catchment you want to use. This dataframe is only used to show information about the catchment.
 The dataframe must contain the following columns:
 
@@ -49,6 +51,7 @@ Default is English ("en"), the other option is German: ("de").
 Important: The table headers don't change and use english naming.
 }
 }
+
 \details{
 This shiny app opens a graphical web interface, in which floodevents are shown with discharge and Precipitation. With the buttons you can browse trough all the floodevents supplemented in the flood file. The floods can be changed (begin and end) and the current properties are calculated. (see Details)
 The plotting output can be changed with a buffer.
