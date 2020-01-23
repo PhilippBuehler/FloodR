@@ -308,7 +308,7 @@ server <- function(input,output,session) {
   output$Gebiet_text <- renderUI({
     str1 <- paste(tr("E"),Reactive_DF$lab)
     str2 <- paste(tr("F"),Reactive_DF$I$Area,"km\U00B2")
-    str4 <- paste("MQ:",round(Reactive_DF$MQ,2),"m\U00B3/s")
-    HTML(paste("<font size=4>","<b>",str1,'<br/>', str2,'<br/>',str3,'<br/>',str4,"</b>","</font>", sep = ''))
+    str3 <- paste("MQ:",round(Reactive_DF$MQ,2),"m\U00B3/s")
+    HTML(paste("<font size=4>","<b>",str1,'<br/>', str2,'<br/>',str3,'<br/>',"</font>", sep = ''))
   })
 }
