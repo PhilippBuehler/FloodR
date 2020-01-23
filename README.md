@@ -1,5 +1,5 @@
 # FloodR
-> Separation of Flood Event and Event Precipitation
+Separation of Flood Event and Event Precipitation
 
 ## Description
 
