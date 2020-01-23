@@ -20,6 +20,7 @@ Column 2: Meassured Data of Discharge
 
 The list entries need to be named after the catchment-identifier (eg. name)
 }
+[OPTIONAL]:
 \item{Precipitation}{
 A list of dataframes with the precipitation data. Each dataframe must contain the precipitation data for a specific catchment with two columns:
 
@@ -30,15 +31,15 @@ Column 2: Meassured Data of Precipitation
 The list entries need to be named after the catchment-identifier (eg. name)
 
 }
+[OPTIONAL]:
 \item{Catchment_Properties}{
 A dataframe with the properties for each catchment you want to use. This dataframe is only used to show information about the catchment.
 The dataframe must contain the following columns:
 
 Column "Name": Unique identifier (eg. Catchment Name) connecting the columns to the names of the list of discharge and precipitation.
 
-Column "Area": Area size of the Catchments
+optional: Column "Area": Area size of the Catchments
 
-Column "Height": Height of the Catchments
 
 }
 \item{language}{

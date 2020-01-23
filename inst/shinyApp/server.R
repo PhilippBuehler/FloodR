@@ -43,7 +43,6 @@ server <- function(input,output,session) {
           Reactive_DF$S=fncols(Reactive_DF$S,str_col[new_col])
         }
 
-
       }else{
         Reactive_DF$lab = names(Discharge)[1]
         Reactive_DF$S=NULL
@@ -52,9 +51,15 @@ server <- function(input,output,session) {
 
       #Put data into Reactive Environment
       Reactive_DF$Q = Discharge[[which(names(Discharge)==Reactive_DF$lab)]]
-      Reactive_DF$N = Precipitation[[which(names(Discharge)==Reactive_DF$lab)]]
+	  
+	  if(is.null(Precipitation)) Precipitation <- Discharge
+	  for(iii in 1:length(Precipitation)) Precipitation[[iii]][,2] <- 0
+      Reactive_DF$N = Precipitation[[which(names(Precipitation)==Reactive_DF$lab)]]
 
+      if(is.null(Catchment_Properties)) Catchment_Properties <- data.frame(Name=names(Discharge),rep(NA,length(Discharge)))
       Reactive_DF$I=Catchment_Properties[grep(Reactive_DF$lab, Catchment_Properties$Name),]
+      if(is.null(Reactive_DF$I$Area)) Reactive_DF$I$Area <- NA
+
       Reactive_DF$MQ=mean(Reactive_DF$Q[,2],na.rm = TRUE)
       Reactive_DF$L=nrow(Reactive_DF$S)
 
@@ -303,7 +308,6 @@ server <- function(input,output,session) {
   output$Gebiet_text <- renderUI({
     str1 <- paste(tr("E"),Reactive_DF$lab)
     str2 <- paste(tr("F"),Reactive_DF$I$Area,"km\U00B2")
-    str3 <- paste(tr("H"),Reactive_DF$I$Height,"m")
     str4 <- paste("MQ:",round(Reactive_DF$MQ,2),"m\U00B3/s")
     HTML(paste("<font size=4>","<b>",str1,'<br/>', str2,'<br/>',str3,'<br/>',str4,"</b>","</font>", sep = ''))
   })
