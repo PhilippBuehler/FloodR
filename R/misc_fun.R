@@ -48,7 +48,7 @@ calc_stats<- function(Floods,Q) {
   Floods$baseflow_begin=round(S$Q_org[1],2)
   Floods$baseflow_end=round(S$Q_org[nrow(S)],2)
 
-  if(Floods$HQ != "" | !is.na(Floods$HQ)){
+  if(!any(Floods$HQ == "" | is.na(Floods$HQ))){
     Floods$HQ_dir=round(Floods$HQ-Floods$baseflow_peak,2)
     Floods$TQDir=round(Floods$dir_Volume/Floods$HQ_dir/60^2*10^6,2)
   }
