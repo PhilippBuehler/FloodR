@@ -100,6 +100,10 @@ eventsep<-function(dailyMQ,monthlyHQ,dvar=3,theta=0.25, ddur=40,Kappa=0.4, eta=0
           while( (((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))|| any(base_diff>0)  || ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2])))) ){
             if(is.na(cumdiffs[pos_end+1])){break}
             pos_end<-pos_end+1
+
+            basefl1<-approxfun(c(daten[pos_start,1],daten[pos_end,1]),c(daten[pos_start,2],daten[pos_end,2]))
+            base_diff<-(basefl1(daten[pos_start:pos_end,1])-daten[pos_start:pos_end,2])
+            base_rel<-(basefl1(daten[pos_end,1])-basefl1(daten[pos_start,1]))/(pos_end-pos_start)
           }
         }
         if(pos_end<length(daten[,1])){
