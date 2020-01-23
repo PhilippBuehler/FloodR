@@ -7,6 +7,7 @@ Flood event separation on the basis of daily mean discharges using a variance ba
 
 ## Installation
 To install the package, the best method is to use the devtools-package:
+- R-Studio version 3.5 is required
 - install.packages(devtools)
 - library(devtools
 - install_github(repo = "PhilippBuehler/FloodR")
