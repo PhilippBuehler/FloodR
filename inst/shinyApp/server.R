@@ -252,6 +252,7 @@ server <- function(input,output,session) {
       c_Q=which(Reactive_DF$S[input$Slider_1,"Peak_date"]==Reactive_DF$Q[,1])
       a_N=which(Reactive_DF$S[input$Slider_1,"Begin"]==Reactive_DF$N[,1])
       b_N=which(Reactive_DF$S[input$Slider_1,"End"]==Reactive_DF$N[,1])
+      
 
       if((a_Q-buff)<1){buff=5}
 
@@ -272,7 +273,9 @@ server <- function(input,output,session) {
                     "Direct-Vol.:",dd$dir_Volume,"Mio. m³ - Direct-HQ:",dd$HQ_dir,"m³/s")
 
       par(xaxs="i", yaxs="i", mar=c(5,5,5,5))
-      plot(plot_data$x, plot_data$N, type="h", ylim=c(max( plot_data$N)*2,0),
+      ylimz_N <- max(plot_data$N) * 2
+      if(ylimz_N==0) ylimz_N=1 
+      plot(plot_data$x, plot_data$N, type="h", ylim=c(ylimz_N,0),
            axes=FALSE, xlab=NA, ylab=NA, col="cornflowerblue",
            lwd=40, lend="square")
       axis(4,cex.axis=1.5)
