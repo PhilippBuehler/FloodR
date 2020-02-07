@@ -8,7 +8,7 @@ Flood event separation based on variance
 Based on daily mean discharges, a window-variance is calculated. If this variance exceeds a certain threshold, a flood event has been detected. To determine the begin of the flood event, the lag 1 differences are considered. The point, where the differences are positive for the last time before the variance exceeds the threshold, is defined as the starting point (including natural variability). The end of the flood event is defined as the point where the sum of the rising limb of the event equals approximately the sum of the falling limb.
 }
 \usage{
-eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5)
+eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5, NA_mode = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,6 +42,12 @@ eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5)
 \item{medbf}{
   numeric: The median of relative difference between the baseflow at the end and the begin of all separated flood events. Used to define the end of the event, if usemed=TRUE.
 }
+\item{NA_mode}{
+  integer: If the timeseries does contain any NA values, NA_mode can be used to interpolate all gaps of continious NA-values by linear interpolation. Only gaps  smaller or equal to NA_mode (>=0) will be interpolated. 
+  Additionally, if the timeseries contains larger gaps, the timeseries is splited into subsamples with each being seperated intependend. The resulting separation table will still be append together.
+}
+
+
 }
 \details{
 To characterize the flood regime, it is necessary to estimate single events and to separate the amount of direct runoff from the total volume. For this purposes, a procedure is developed, which is based on the following three assumptions:
