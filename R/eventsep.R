@@ -17,7 +17,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 		daten_NA[is.na(daten_NA)] <- 1
 		rl <- rle(daten_NA)
 		to_int <- which(rl$lengths <= NA_mode & rl$values==1)
-		if(length(to_int)>1){
+		if(length(to_int)>=1){
 			for(i in 1:length(to_int)){
 				inds_to_interp <- (sum(rl$lengths[1:(to_int[i]-1)])) : (sum(rl$lengths[1:to_int[i]])+1)
 				daten[inds_to_interp,2] <- seq(daten[inds_to_interp[1],2],
@@ -220,7 +220,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 							minis<-mapply(function(x,y){min(daten[x:y,2])},x=peaks[1:(length(peaks)-1)],y=peaks[2:length(peaks)])
 							
 							#test the condition for double-peaked events
-							if(any(((0.4*maxis)>= minis) & ((maxis*0.2)<=minmax) & (minis <= (0.7*minmax)))){ ####FallÜberlagerung
+							if(any(((0.4*maxis)>= minis) & ((maxis*0.2)<=minmax) & (minis <= (0.7*minmax)))){ ####FallÃœberlagerung
 								
 								max_diff<-minmax-minis
 								
