@@ -7,8 +7,21 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 		monthlyHQ[,1] <- as.Date(monthlyHQ[,1], format="%d.%m.%Y")
 	}
 	
+	
+	if(is.null(monthlyHQ)){
+		monthlyHQ <- data.frame(NA,NA)
+	}else{
+		if(!any(class(monthlyHQ[,1]) == "Date")){
+			monthlyHQ[,1] <- as.Date(monthlyHQ[,1], format="%d.%m.%Y")
+		}
+	}
+	
+
 	daten<-dailyMQ[,1:2]
-	daten[,1]<-as.Date(daten[,1], format="%d.%m.%Y")
+	if(!any(class(daten[,1]) == "Date")){
+		daten[,1]<-as.Date(daten[,1], format="%d.%m.%Y")
+	}
+	
 	
 	if(!is.null(NA_mode)){
 		#Interpolate single values

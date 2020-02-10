@@ -13,10 +13,10 @@ eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5, N
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dailyMQ}{
-  A dataframe where the date (d.m.Y) is given in the first and the daily mean discharges are given in the second column.
+  A dataframe where the date is given as R-date or string (d.m.Y)) in the first and the daily mean discharges are given in the second column.
 }
 \item{monthlyHQ}{
-  A dataframe where the date (d.m.Y) is given in the first and the monthly maximum discharge peaks are given in the second column.
+  A dataframe where the date is given as R-date or string (d.m.Y) in the first and the monthly maximum discharge peaks are given in the second column.
 }
 \item{dvar}{
   integer: The window length of the moving variance in days. By default, it is set to three days.
