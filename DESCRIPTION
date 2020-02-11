@@ -1,7 +1,7 @@
 Package: FloodR
 Type: Package
 Title: Separation of Flood Event and Event Precipitation
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person("Philipp", "Buehler", email = "philipp.buehler@rub.de",role = c("aut", "cre")), person("Svenja", "Fischer", email = "svenja.fischer@rub.de",role = c("aut")), person("Laura", "Haendel", email = "laura.haendel@rub.de",role = c("aut")))
 Maintainer: Philipp Buehler <philipp.buehler@rub.de>
 Description: Flood event separation on the basis of daily mean discharges using a variance based threshold. The monthly maximum discharges are used as peak values. To define the event separation, first an interpolation algorithm based on Thiessen polygons is used to transform station precipitation into areal precipitation. With the areal precipitation, the event precipitation for each event can be defined using a change-point based approach applied to slope of the cummulative sums of the precipitation.

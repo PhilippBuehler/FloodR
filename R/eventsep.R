@@ -130,7 +130,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 						peak_ind<-peak_ind-1
 					}
 					#chosse the event start as the days where the lag 1  differences are negative the last time
-					pos_start<-max(which(diffs[1:(peak_ind-1)]<0),1)
+					pos_start<-max(which(diffs[1:(peak_ind-1)]<0),3)
 					
 					#modify start according to the assumptions
 					while(((daten[pos_start+1,2]-daten[pos_start,2])< ((daten[peak_ind,2]-daten[pos_start,2])*eta)) && (pos_start<=peak_ind)) {
@@ -138,7 +138,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 					}
 					
 					if(((daten[pos_start-1,2]-daten[pos_start-2,2])>((daten[peak_ind,2]-daten[pos_start,2])*Kappa)) && (daten[pos_start-2,2]<daten[peak_ind,2])){
-						pos_start<-pos_start-2
+						pos_start<-max(pos_start-2,3)
 					}
 					
 					if(daten[pos_start,2]>daten[pos_start+1,2]){pos_start<-pos_start+1}
@@ -233,7 +233,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 							minis<-mapply(function(x,y){min(daten[x:y,2])},x=peaks[1:(length(peaks)-1)],y=peaks[2:length(peaks)])
 							
 							#test the condition for double-peaked events
-							if(any(((0.4*maxis)>= minis) & ((maxis*0.2)<=minmax) & (minis <= (0.7*minmax)))){ ####FallÜberlagerung
+							if(any(((0.4*maxis)>= minis) & ((maxis*0.2)<=minmax) & (minis <= (0.7*minmax)))){ ####Fall?berlagerung
 								
 								max_diff<-minmax-minis
 								
