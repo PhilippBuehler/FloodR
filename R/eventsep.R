@@ -1,4 +1,4 @@
-eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
+﻿eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 	Kappa=0.4, eta=0.1, delta=0.2, usemed=FALSE, medbf=0.5, NA_mode = NULL){
 	
 	if(is.null(monthlyHQ)){
@@ -130,7 +130,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 						peak_ind<-peak_ind-1
 					}
 					#chosse the event start as the days where the lag 1  differences are negative the last time
-					pos_start<-max(which(diffs[1:(peak_ind-1)]<0))
+					pos_start<-max(which(diffs[1:(peak_ind-1)]<0),1)
 					
 					#modify start according to the assumptions
 					while(((daten[pos_start+1,2]-daten[pos_start,2])< ((daten[peak_ind,2]-daten[pos_start,2])*eta)) && (pos_start<=peak_ind)) {
