@@ -1,4 +1,4 @@
-﻿eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
+eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 	Kappa=0.4, eta=0.1, delta=0.2, usemed=FALSE, medbf=0.5, NA_mode = NULL){
 	
 	if(is.null(monthlyHQ)){
