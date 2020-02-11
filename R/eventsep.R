@@ -16,7 +16,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
 		}
 	}
 	
-
+	
 	daten<-dailyMQ[,1:2]
 	if(!any(class(daten[,1]) == "Date")){
 		daten[,1]<-as.Date(daten[,1], format="%d.%m.%Y")
