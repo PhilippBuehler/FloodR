@@ -117,7 +117,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
     
     #start iterating the days until the variance threshold is exceeded
     events<-NULL
-    i<-0
+    i<-4
     while(i <= length(var3d)){
       old_start<-0
       i<-i+1
@@ -143,7 +143,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
           
           if(daten[pos_start,2]>daten[pos_start+1,2]){pos_start<-pos_start+1}
           
-          while(daten[peak_ind,2]<daten[peak_ind+1,2]){
+          while(daten[peak_ind,2]<=daten[peak_ind+1,2]){
             peak_ind<-peak_ind+1
           }
           
