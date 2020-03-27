@@ -27,7 +27,7 @@ server <- function(input,output,session) {
 			}else{
 				Reactive_DF$S = Dummy$Floods
 				Reactive_DF$Q = Dummy$Q
-				Reactive_DF$N = Dummy$P
+				Reactive_DF$N = Dummy$N
 				Reactive_DF$lab = "Dummy_Catchment"
 				Reactive_DF$I = data.frame(Name=Reactive_DF$lab)
 			}
