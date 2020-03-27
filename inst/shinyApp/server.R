@@ -13,20 +13,12 @@ server <- function(input,output,session) {
 				Reactive_DF$lab=substr(inFile$name,1,(w_str-1))
 				Reactive_DF$S <- my.read.table(inFile$datapath,sep=";", header = TRUE)
 				
-				#Create Colums if not already there
-				str_col=c("Not_a_Floodevent","Irregularity","more_Comments","Modified","Comment","Slope_of_Baseflow","Volume","dir_Volume",
-					"baseflow_peak","baseflow_begin","baseflow_end" ,"HQ_dir", "TQDir")
-				for (new_col in 1:length(str_col)){
-					Reactive_DF$S=fncols(Reactive_DF$S,str_col[new_col])
-				}
-				
 				Reactive_DF$Q = Discharge[[which(names(Discharge)==Reactive_DF$lab)]]
 				
 				if(is.null(Precipitation)) Precipitation <- Discharge
 				for(iii in 1:length(Precipitation)) Precipitation[[iii]][,2] <- 0
 				
 				Reactive_DF$N = Precipitation[[which(names(Precipitation)==Reactive_DF$lab)]]
-				
 				
 				if(is.null(Catchment_Properties)) Catchment_Properties <- data.frame(Name=names(Discharge),rep(NA,length(Discharge)))
 				Reactive_DF$I=Catchment_Properties[grep(Reactive_DF$lab, Catchment_Properties$Name),]
@@ -44,6 +36,14 @@ server <- function(input,output,session) {
 			if(is.null(Reactive_DF$I$Area)) Reactive_DF$I$Area <- NA
 			Reactive_DF$MQ=mean(Reactive_DF$Q[,2],na.rm = TRUE)
 			Reactive_DF$L=nrow(Reactive_DF$S)
+			
+			#Create Colums if not already there
+			str_col=c("Not_a_Floodevent","Irregularity","more_Comments","Modified","Comment","Slope_of_Baseflow","Volume","dir_Volume",
+				"baseflow_peak","baseflow_begin","baseflow_end" ,"HQ_dir", "TQDir")
+			for (new_col in 1:length(str_col)){
+				Reactive_DF$S=fncols(Reactive_DF$S,str_col[new_col])
+			}
+			
 			
 			
 			if(!is.null(Reactive_DF$S)){
