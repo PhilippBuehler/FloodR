@@ -4,13 +4,9 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
   if(is.null(monthlyHQ)){
     monthlyHQ <- data.frame(NA,NA)
   }else{
-    monthlyHQ[,1] <- as.Date(monthlyHQ[,1], format="%d.%m.%Y")
-  }
-  
-  
-  if(is.null(monthlyHQ)){
-    monthlyHQ <- data.frame(NA,NA)
-  }else{
+
+
+
     if(!any(class(monthlyHQ[,1]) == "Date")){
       monthlyHQ[,1] <- as.Date(monthlyHQ[,1], format="%d.%m.%Y")
     }
@@ -61,7 +57,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
     }
     daten_list <- split(daten, spl)
     if(length(daten_list)>1){
-      cat("Splitted timeseries into",  length(daten_list), "parts, but appending results together")
+      cat("Splitted timeseries into",  length(daten_list), "parts, but appending results togethe\n")
     }
   }else{
     if(!identical(unique(diff(daten[,1])), 1)) stop("Timeseries not continious!")
@@ -71,15 +67,22 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
   
   
   
+#calculate the window-variance with window length dvar
+  data_temp_var3d <- do.call("rbind",daten_list)
+  var3d<-rep(0,length(data_temp_var3d[,1]))
+  for(i in dvar:length(data_temp_var3d[,1])){
+    var3d[i]<-var(data_temp_var3d[(i-(dvar-1)):i,2],na.rm = TRUE)
+  }
+  
+  #calculate the theshold for the variance
+  thvar<-mean(var3d[dvar:length(var3d)], na.rm = TRUE)+theta*sd(var3d[dvar:length(var3d)], na.rm = TRUE)
   
   #Start acutal sep
-  for(list_it in 1:length(daten_list)){
+  for(list_it in seq_along(daten_list)){
     
     daten <- daten_list[[list_it]]
     
     # MQ<-mean(daten[,2], na.rm=TRUE)
-    
-    
     diffs<-diff(daten[,2], lag=1)
     diffs<-c(0,diffs)
     
@@ -98,34 +101,21 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
       }
     }else{
       cumdiffs<-cumsum(diffs)}
-    
-    
-    #calculate the window-variance with window length dvar
-    var3d<-numeric()
-    for(i in dvar:length(daten[,1])){
-      var3d[i]<-var(daten[(i-(dvar-1)):i,2],na.rm = TRUE)
-      
-    }
-    
-    var3d[1:(dvar-1)]<-0
-    
-    #calculate the theshold for the variance
-    thvar<-mean(var3d[dvar:length(var3d)], na.rm = TRUE)+theta*sd(var3d[dvar:length(var3d)], na.rm = TRUE)
-    
-    
-    n2<-0
+
+
     
     #start iterating the days until the variance threshold is exceeded
     events<-NULL
+    n2<-0
     i<-10
-    while(i <= length(var3d)){
+    while(i < length(var3d)){
       old_start<-0
       i<-i+1
-      if(is.na(var3d[i])){}else{
+      if(!is.na(var3d[i])){
         if(var3d[i]>thvar){
           var3dpart<-var3d[(i):length(var3d)]
           endvar<-min(which(var3dpart<thvar)[1],length(var3dpart), na.rm=TRUE)
-          peak_ind<-i+which.max(var3dpart[1:endvar])-1
+          peak_ind<-min((i + which.max(var3dpart[1:endvar])-1), (length(var3d)-10))
           while(daten[peak_ind-1,2]>daten[peak_ind,2]){
             peak_ind<-peak_ind-1
           }
@@ -133,7 +123,8 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
           pos_start<-max(which(diffs[1:(peak_ind-1)]<0),3)
           
           #modify start according to the assumptions
-          while(((daten[pos_start+1,2]-daten[pos_start,2])< ((daten[peak_ind,2]-daten[pos_start,2])*eta)) && (pos_start<=peak_ind)) {
+          while(((daten[pos_start+1,2]-daten[pos_start,2])< 
+		  ((daten[peak_ind,2]-daten[pos_start,2])*eta)) && (pos_start<peak_ind-1)) {
             pos_start<-pos_start+1
           }
           
@@ -141,9 +132,9 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
             pos_start<-max(pos_start-2,3)
           }
           
-          if(daten[pos_start,2]>daten[pos_start+1,2]){pos_start<-pos_start+1}
+          if(daten[pos_start,2]>daten[pos_start+1,2]) pos_start<-pos_start+1
           
-          while(daten[peak_ind,2]<=daten[peak_ind+1,2]){
+          while(daten[peak_ind,2]<=daten[peak_ind+1,2]&& peak_ind < (length(var3d)-2))){
             peak_ind<-peak_ind+1
           }
           
@@ -160,7 +151,11 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
           
           #use median baseflow difference?
           if(usemed){
-            while( (((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))|| any(base_diff>0) || (base_rel>(2*medbf)) || ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2])))) ){
+            while((((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
+                sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))||
+                any(base_diff>0) || (base_rel>(2*medbf)) || 
+                ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2]))))){
+              
               if(is.na(cumdiffs[pos_end+1])){break}
               pos_end<-pos_end+1
               
@@ -169,7 +164,9 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
               base_rel<-(basefl1(daten[pos_end,1])-basefl1(daten[pos_start,1]))/(pos_end-pos_start)
             }
           }else{
-            while( (((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))|| any(base_diff>0)  || ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2])))) ){
+            while( (((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
+                sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))|| any(base_diff>0)  || 
+                ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2])))) ){
               if(is.na(cumdiffs[pos_end+1])){break}
               pos_end<-pos_end+1
               
@@ -440,7 +437,8 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
                   if(daten[pos_start,2]>=daten[pos_start+1,2]){pos_start<-pos_start+1}
                   
                   if(any(daten[(pos_start+1):(which.max(daten[pos_start:pos_end,2])+pos_start-1),2]<daten[pos_start,2])){
-                    pos_start<-max(which(daten[(pos_start+1):(which.max(daten[pos_start:pos_end,2])+pos_start-1),2]==min(daten[(pos_start+1):(which.max(daten[pos_start:pos_end,2])+pos_start-1),2])))+pos_start
+                    pos_start<-max(which(daten[(pos_start+1):(which.max(daten[pos_start:pos_end,2])+pos_start-1),2]==
+                        min(daten[(pos_start+1):(which.max(daten[pos_start:pos_end,2])+pos_start-1),2])))+pos_start
                   }
                   
                   
@@ -487,7 +485,9 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
       }
     }
     
-    events2<-cbind(as.character(as.Date(as.numeric(events[,1]),origin ="1970-01-01")),as.character(as.Date(as.numeric(events[,2]),origin ="1970-01-01")),as.character(as.Date(as.numeric(events[,3]),origin ="1970-01-01")), events[,4], events[,5], events[,6], events[,7], events[,8],events[,9], events[,10], events[,11],events[,12],events[,13])
+    events2<-cbind(as.character(as.Date(as.numeric(events[,1]),origin ="1970-01-01")),
+      as.character(as.Date(as.numeric(events[,2]),origin ="1970-01-01")),as.character(as.Date(as.numeric(events[,3]),origin ="1970-01-01")),
+      events[,4], events[,5], events[,6], events[,7], events[,8],events[,9], events[,10], events[,11],events[,12],events[,13])
     
     events2<-as.data.frame(events2)
     
