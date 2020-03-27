@@ -8,7 +8,7 @@ Run_WebFlood <- function(Discharge=NULL,Precipitation=NULL,Catchment_Properties=
   PKGENVIR$Discharge <- Discharge
   PKGENVIR$Precipitation <- Precipitation
   PKGENVIR$Catchment_Properties <- Catchment_Properties
-
-
+  PKGENVIR$Dummy <- Dummy
+  
   shiny::runApp(appDir = system.file("shinyApp", package = "FloodR"))
 }
