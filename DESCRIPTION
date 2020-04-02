@@ -8,6 +8,6 @@ Description: Flood event separation on the basis of daily mean discharges using 
 License: GPL-3
 Encoding: UTF-8
 Imports: shiny, spatstat, progress
-Depends: R (>= 3.10)
+Depends: R (>= 3.1)
 LazyData: true
 RoxygenNote: 6.1.1
