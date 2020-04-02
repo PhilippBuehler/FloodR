@@ -1,4 +1,4 @@
-eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
+eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40,omega=2,
   Kappa=0.4, eta=0.1, delta=0.2, usemed=FALSE, medbf=0.5, NA_mode = NULL){
   
   if(is.null(monthlyHQ)){
@@ -128,12 +128,21 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,theta=0.25, ddur=40,
             pos_start<-pos_start+1
           }
           
-          if(((daten[pos_start-1,2]-daten[pos_start-2,2])>((daten[peak_ind,2]-daten[pos_start,2])*Kappa)) && (daten[pos_start-2,2]<daten[peak_ind,2])){
-            pos_start<-max(pos_start-2,3)
-          }
+           gammaneu<-min(gamma,pos_start-2)
+          maxstart<-matrix(NA, nrow=gammaneu, ncol=gammaneu+1)
+          for(z in 1:gammaneu){
+             for (v in (z+1):(gammaneu+1)){
+                               
+              maxstart[z,v]<-daten[pos_start-z,2]-daten[pos_start-v,2]
+                               
+                               
+                  }
+              }
+    if((max(maxstart, na.rm = TRUE)>((daten[peak_ind,2]-daten[pos_start,2])*Kappa)) && (daten[pos_start-2,2]<daten[peak_ind,2])){
+                             pos_start<-max(pos_start-which(maxstart == max(maxstart, na.rm=TRUE), arr.ind = TRUE)[2],3)
+          }							   
           
           if(daten[pos_start,2]>daten[pos_start+1,2]) pos_start<-pos_start+1
-          
           while(daten[peak_ind,2]<=daten[peak_ind+1,2]&& peak_ind < (length(var3d)-2)){
             peak_ind<-peak_ind+1
           }
@@ -151,7 +160,7 @@ base_rel<-(basefl1(daten[pos_end,1])-basefl1(daten[pos_start,1]))/(pos_end-pos_s
 
 #use median baseflow difference?
 if(usemed){
-  while((((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
+  while((((((sum(diffs[(peak_ind+1):(pos_end+omega)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
       sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))||
       any(base_diff>0) || (base_rel>(2*medbf)) || 
       ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2]))))){
@@ -164,7 +173,7 @@ if(usemed){
     base_rel<-(basefl1(daten[pos_end,1])-basefl1(daten[pos_start,1]))/(pos_end-pos_start)
   }
 }else{
-  while( (((((sum(diffs[(peak_ind+1):(pos_end+2)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
+  while( (((((sum(diffs[(peak_ind+1):(pos_end+omega)], na.rm = TRUE)-sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))/
       sum(diffs[(peak_ind+1):(pos_end)], na.rm = TRUE))>(1+delta))|| any(base_diff>0)  || 
       ((incsum+sum(diffs[(peak_ind+1):pos_end], na.rm = TRUE))>(1*daten[pos_start,2])))) ){
     if(is.na(cumdiffs[pos_end+1])){break}

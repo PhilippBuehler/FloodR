@@ -6,15 +6,16 @@ This shiny app opens a graphical web interface, in which floodevents are shown w
 
 }
 \usage{
-Run_WebFlood(Discharge,Precipitation=NULL,Catchment_Properties=NULL,language="en")
+Run_WebFlood(Discharge=NULL,Precipitation=NULL,Catchment_Properties=NULL,language="en")
 }
 
 \arguments{
 
 \item{Discharge}{
+[OPTIONAL]:
 A list of dataframes with the discharge data. Each dataframe must contain the Dischare data for a specific catchment with two columns:
 
-Column 1: Date in a continious daily timeseries (R "date" format)
+Column 1: Date in a continiuous daily timeseries (R "date" format)
 
 Column 2: Meassured Data of Discharge
 
@@ -25,7 +26,7 @@ The list entries need to be named after the catchment-identifier (eg. name)
 [OPTIONAL]:
 A list of dataframes with the precipitation data. Each dataframe must contain the precipitation data for a specific catchment with two columns:
 
-Column 1: Date in a continious daily timeseries (R "date" format)
+Column 1: Date in a continiuous daily timeseries (R "date" format)
 
 Column 2: Meassured Data of Precipitation
 
@@ -41,8 +42,6 @@ The dataframe must contain the following columns:
 Column "Name": Unique identifier (eg. Catchment Name) connecting the columns to the names of the list of discharge and precipitation.
 
 optional: Column "Area": Area size of the Catchments
-
-
 }
 \item{language}{
 The language for the graphical interface.
@@ -55,7 +54,7 @@ Important: The table headers don't change and use english naming.
 \details{
 This shiny app opens a graphical web interface, in which floodevents are shown with discharge and Precipitation. With the buttons you can browse trough all the floodevents supplemented in the flood file. The floods can be changed (begin and end) and the current properties are calculated. (see Details)
 The plotting output can be changed with a buffer.
-Uppon opening the interface, you are promted to open a ".csv"-file (";"-separator) which contains the flood information (begin,end and peak date). The naming convention of the file is "CATCHMENTNAME_your_comments.csv".
+Uppon opening the interface, you need to open a ".csv"-file (";"-separator) which contains the flood information (begin,end and peak date). The naming convention of the file is "CATCHMENTNAME_your_comments.csv".
 It is important to have the exact catchment name before the underscore. After the underscore, anything can be written, followed by the .csv extension.
 The file needs the following columns:
 
@@ -74,6 +73,11 @@ Column "HQ": A value for the "true" peak of the flood, as if it was meassured in
 Philipp Buehler
 }
 \examples{
+#Run the dummy data:
+Run_WebFlood()
+
+
+#Run with own Data:
 Discharge <-list(A=data.frame(Date=seq(from=as.Date("01.01.2000", format="\%d.\%m.\%Y"),
                                to=as.Date("01.01.2004", format="\%d.\%m.\%Y"), by="days"),
                       discharge=rbeta(1462,2,20)*100),

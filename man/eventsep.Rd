@@ -27,6 +27,11 @@ eventsep(dailyMQ,monthlyHQ,dvar,theta, ddur,Kappa,eta,delta usemed, medbf=0.5, N
 \item{ddur}{
   integer: The approximate minimum length of an overlaid event in days. By default it is set to ddur=40.
 }
+\item{omega}{
+  integer: Threshold parameter for defining the end of a flood event. By default it is set to omega=2.
+}
+
+
 \item{Kappa}{
   numeric: Threshold parameter for defining the begin of a flood event. By default it is set to Kappa=0.4.
 }
