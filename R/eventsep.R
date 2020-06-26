@@ -7,15 +7,15 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40
     
     
     
-    if(!any(class(monthlyHQ[,1]) == "Date")){
-      monthlyHQ[,1] <- as.Date(monthlyHQ[,1], format="%d.%m.%Y")
+    if(!any(class(monthlyHQ[[1]]) == "Date")){
+      monthlyHQ[[1]] <- as.Date(monthlyHQ[[1]], format="%d.%m.%Y")
     }
   }
   
   
   daten<-dailyMQ[,1:2]
-  if(!any(class(daten[,1]) == "Date")){
-    daten[,1]<-as.Date(daten[,1], format="%d.%m.%Y")
+  if(!any(class(daten[[1]]) == "Date")){
+    daten[[1]]<-as.Date(daten[[1]], format="%d.%m.%Y")
   }
   
   
