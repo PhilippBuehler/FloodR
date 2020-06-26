@@ -69,7 +69,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40
   
   
   #calculate the window-variance with window length dvar
-  data_temp_var3d <- do.call("rbind",daten_list)
+  data_temp_var3d <- daten
   var3d<-rep(0,length(data_temp_var3d[,1]))
   for(i in dvar:length(data_temp_var3d[,1])){
     var3d[i]<-var(data_temp_var3d[(i-(dvar-1)):i,2],na.rm = TRUE)
