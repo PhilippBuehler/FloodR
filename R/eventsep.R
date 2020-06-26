@@ -57,11 +57,12 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40
     }
     daten_list <- split(daten, spl)
     if(length(daten_list)>1){
-      cat("Splitted timeseries into",  length(daten_list), "parts, but appending results togethe\n")
+      cat("Splitted timeseries into",  length(daten_list), "parts, but appending results together\n")
     }
   }else{
-    if(!identical(unique(diff(daten[,1])), 1)) stop("Timeseries not continious!")
-    if(any(is.na(daten[,2]))) stop("Timeseries does contain NA, but NA_mode is not set")
+    spl <- rep(1, nrow(daten))
+    if(!identical(unique(diff(daten[,1])), 1)) stop("Timeseries not continious!\n")
+    if(any(is.na(daten[,2]))) stop("Timeseries does contain NA, but NA_mode is not set!\n")
     daten_list <- list(daten)
   }
   
@@ -73,7 +74,8 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40
   for(i in dvar:length(data_temp_var3d[,1])){
     var3d[i]<-var(data_temp_var3d[(i-(dvar-1)):i,2],na.rm = TRUE)
   }
-  
+  var3d_list <- split(var3d, spl)
+
   #calculate the theshold for the variance
   thvar<-mean(var3d[dvar:length(var3d)], na.rm = TRUE)+theta*sd(var3d[dvar:length(var3d)], na.rm = TRUE)
   
@@ -81,7 +83,7 @@ eventsep <- function(dailyMQ, monthlyHQ=NULL,dvar=3,gamma=1, theta=0.25, ddur=40
   for(list_it in seq_along(daten_list)){
     
     daten <- daten_list[[list_it]]
-    
+    var3d <- var3d_list[[list_it]]
     # MQ<-mean(daten[,2], na.rm=TRUE)
     diffs<-diff(daten[,2], lag=1)
     diffs<-c(0,diffs)
