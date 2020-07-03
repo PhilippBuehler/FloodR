@@ -129,7 +129,7 @@ server <- function(input,output,session) {
     if(!is.null(Reactive_DF$S)){
       temp=Reactive_DF$S
       cond1 = temp[input$Slider_1,"Begin"] != as.POSIXct(paste0(input$date1, " ",sprintf("%02d", input$hour1),":00:00"))
-      cond2 = as.Date(temp[input$Slider_1,"Begin"]) == as.Date("2099-09-09")
+      cond2 = as.Date(temp[input$Slider_1,"Begin"]) != as.Date("2099-09-09")
 
       if(cond1 && cond2){
         temp[input$Slider_1,"Begin"]=as.POSIXct(paste0(input$date1, " ",sprintf("%02d", input$hour1),":00:00"))
@@ -146,7 +146,7 @@ server <- function(input,output,session) {
     if(!is.null(Reactive_DF$S)){
       temp=Reactive_DF$S
       cond1 = temp[input$Slider_1,"End"] != as.POSIXct(paste0(input$date2, " ",sprintf("%02d", input$hour2),":00:00"))
-      cond2 = as.Date(temp[input$Slider_1,"End"]) == as.Date("2099-09-09")
+      cond2 = as.Date(temp[input$Slider_1,"End"]) != as.Date("2099-09-09")
 
       if(cond1 && cond2){
         temp[input$Slider_1,"End"]= as.POSIXct(paste0(input$date2, " ",sprintf("%02d", input$hour2),":00:00"))
