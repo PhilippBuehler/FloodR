@@ -41,7 +41,7 @@ calc_stats<- function(Floods,Q) {
 
   S$baseflow=seq(S$Q_org[1],S$Q_org[nrow(S)],((S$Q_org[nrow(S)]-S$Q_org[1])/(nrow(S)-1)))
 
-  Floods$Slope_of_Baseflow=(S$Q_org[nrow(S)]-S$Q_org[1]) / (ind[2]-ind[1])
+  Floods$Slope_of_Baseflow=round((S$Q_org[nrow(S)]-S$Q_org[1]) / (ind[2]-ind[1]),2)
 
 
   Floods$dir_Volume=round((Floods$Volume - (sum(S$baseflow)/10^6 *24*60^2)),2)
