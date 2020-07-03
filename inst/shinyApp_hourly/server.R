@@ -263,7 +263,6 @@ server <- function(input,output,session) {
       plot_data=data.frame(x=Reactive_DF$Q[(a_Q-buff):(b_Q+buff),1],Q=Reactive_DF$Q[(a_Q-buff):(b_Q+buff),2],
         N=Reactive_DF$N[(a_N-buff):(b_N+buff),2])
       Qb_steigung=(plot_data$Q[nrow(plot_data)-buff]-plot_data$Q[buff+1])/(b_Q-a_Q)
-      # Reactive_DF$S[input$Slider_1,"Slope_of_Baseflow"]=round(Qb_steigung,3)
 
       if(a_Q!=b_Q){
         dd=calc_stats(Reactive_DF$S[input$Slider_1,],Reactive_DF$Q)
