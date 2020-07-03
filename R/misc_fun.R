@@ -31,6 +31,7 @@ calc_stats<- function(Floods,Q) {
   a=Floods$Begin
   b=Floods$End
   ind=sapply(c(a,b),function(x) which(Q[,1]==x))
+  if(
   S=data.frame(date=Q[ind[1]:ind[2],1],Q_org=Q[ind[1]:ind[2],2],scheit=FALSE)
 
   scheit=ifelse(length(which(S$date==Floods$Peak_date))!=0,which(S$date==Floods$Peak_date),which.max(S$Q))
@@ -40,13 +41,16 @@ calc_stats<- function(Floods,Q) {
 
   S$baseflow=seq(S$Q_org[1],S$Q_org[nrow(S)],((S$Q_org[nrow(S)]-S$Q_org[1])/(nrow(S)-1)))
 
+  Floods$Qb_steigung=(S$Q_org[nrow(S)]-S$Q_org[1]) / (ind[2]-ind[-1])
+
 
   Floods$dir_Volume=round((Floods$Volume - (sum(S$baseflow)/10^6 *24*60^2)),2)
-
 
   Floods$baseflow_peak=round(S$baseflow[which(S$Scheitel==TRUE)],2)
   Floods$baseflow_begin=round(S$Q_org[1],2)
   Floods$baseflow_end=round(S$Q_org[nrow(S)],2)
+
+
 
   if(!any(Floods$HQ == "" | is.na(Floods$HQ))){
     Floods$HQ_dir=round(Floods$HQ-Floods$baseflow_peak,2)
