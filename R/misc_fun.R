@@ -31,7 +31,7 @@ calc_stats<- function(Floods,Q) {
   a=Floods$Begin
   b=Floods$End
   ind=sapply(c(a,b),function(x) which(Q[,1]==x))
-  if(
+  
   S=data.frame(date=Q[ind[1]:ind[2],1],Q_org=Q[ind[1]:ind[2],2],scheit=FALSE)
 
   scheit=ifelse(length(which(S$date==Floods$Peak_date))!=0,which(S$date==Floods$Peak_date),which.max(S$Q))
