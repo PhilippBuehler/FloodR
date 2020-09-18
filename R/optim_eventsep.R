@@ -31,6 +31,8 @@ opt_fun <- function(par, Discharge, Q_upper, Q_lower, lower_tolerance, NA_mode, 
   return((1-G_all))
 }
 
+
+
 optimize_floodsep_parameters <- function(params, Discharge,
   upper_TH=0.95, lower_TH=0.5, lower_tolerance=0.01, NA_mode=NULL){
   
