@@ -1,5 +1,5 @@
-\name{optim_eventsep}
-\alias{optim_eventsep}
+\name{optimize_floodsep_parameters}
+\alias{optimize_floodsep_parameters}
 \title{
   Optimize the parameters of eventsep 
 }
