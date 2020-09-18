@@ -7,7 +7,7 @@
   Optimize the parameters of eventsep by maximising flood events during high quantiles and minimizing flood events during low quantiles
 }
 \usage{
-  optim_eventsep(params, Discharge, upper_TH=0.95, lower_TH=0.5, lower_tolerance=0.01, NA_mode=NULL)
+  optimize_floodsep_parameters(params, Discharge, upper_TH=0.95, lower_TH=0.5, lower_tolerance=0.01, NA_mode=NULL)
 }
 \arguments{
   \item{params}{
