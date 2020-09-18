@@ -19,10 +19,12 @@ opt_fun <- function(par, Discharge, Q_upper, Q_lower, lower_tolerance, NA_mode, 
   Discharge <- merge(Discharge, Floods_seq[,.(Datum, is_Flood)], all.x=TRUE, by="Datum")
   Discharge[is.na(is_Flood),"is_Flood"] <- FALSE
 
+
+
   G_upper <- nrow(Discharge[is_Flood==TRUE & Abfluss > Q_upper]) / nrow(Discharge[Abfluss > Q_upper])
   G_lower <- nrow(Discharge[is_Flood==TRUE & Abfluss < Q_lower]) / nrow(Discharge[Abfluss < Q_lower])
-  
-  G_all <- G_upper - max(0, (lower_tolerance-G_lower))
+
+  G_all <- G_upper - max(0, (G_lower - lower_tolerance))
   if(G_all<0) G_all <- 0
   if(G_all>1) G_all <- 1
   
