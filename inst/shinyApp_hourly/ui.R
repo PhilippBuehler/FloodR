@@ -50,7 +50,7 @@ ui <- fluidPage(
       htmlOutput("Gebiet_text"),
       numericInput("buff",
         h3("Buffer"),
-        value = 24)
+        value = 240)
     ),
     column(2,
       fileInput("file1", label = h3(tr("csv")),
