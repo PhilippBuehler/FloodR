@@ -6,14 +6,7 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  comment = "#>",
-  fig.path = "figure/",
-  fig.height = 7,
-  fig.width = 7
-)
-```
+
 
 # FloodR Package
 
@@ -35,7 +28,7 @@ library("FloodR")
 ```
 
 
-### separation of Flood events
+### Separation of Flood events
 ```{r}
 dailyMQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
   to=as.Date("01.01.2004", format="%d.%m.%Y"), by="days"),
@@ -50,7 +43,7 @@ head(Flood_events)
 ```
 
 
-
+### Correction of Flood events
 ```{r, eval = FALSE}
 # Run the Web separation on the dummy Catchment
 Run_WebFlood()
