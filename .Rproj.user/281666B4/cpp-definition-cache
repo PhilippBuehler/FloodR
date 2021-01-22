@@ -1,0 +1,17 @@
+[
+    {
+        "file": "D:/Packages/FloodR/src/leastSqrRegression.cpp",
+        "file_last_write": 1611229420.0,
+        "definitions": [
+            {
+                "usr": "c:@F@leastSqrRegression#I#I#I#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "leastSqrRegression(int, int, int, bool)",
+                "file": "D:/Packages/FloodR/src/leastSqrRegression.cpp",
+                "line": 10,
+                "column": 6
+            }
+        ]
+    }
+]

@@ -1,0 +1,85 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figure/",
+  fig.height = 1
+)
+```
+
+# FloodR Package
+
+## Description
+Flood event separation on the basis of daily and hourly mean discharges using a variance based threshold. The monthly maximum discharges are used as peak values. To define the event separation, first an interpolation algorithm based on Thiessen polygons is used to transform station precipitation into areal precipitation. With the areal precipitation, the event precipitation for each event can be defined using a change-point based approach applied to slope of the cummulative sums of the precipitation.
+
+
+## Installation
+
+```r
+devtools::install_github(repo = "PhilippBuehler/FloodR")
+```
+
+
+## Usage
+
+```{r}
+library("FloodR")
+```
+
+
+### separation of Flood events
+```{r}
+dailyMQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
+  to=as.Date("01.01.2004", format="%d.%m.%Y"), by="days"),
+  discharge=rbeta(1462,2,20)*100)
+
+monthlyHQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
+  to=as.Date("01.01.2004", format="%d.%m.%Y"), by="months"),
+  discharge=dailyMQ$discharge[(0:48)*12+1]+rnorm(49,5,1))
+
+Flood_events <- eventsep(dailyMQ, monthlyHQ)
+head(Flood_events)
+```
+
+
+
+```{r, eval = FALSE}
+# Run the Web separation on the dummy Catchment
+Run_WebFlood()
+
+```
+
+### Typing of flood events
+
+```{r}
+# Open the Data
+data("Sample_Flood_events")
+head(Sample_Flood_events)
+
+# Type the floods
+# We need a Flood table with at least the following columns:
+# Sum_SM: Sum of snowmelt during the floodevent in mm
+# Sum_N: Sum of precipitation during the floodevent in mm
+# dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s
+# HQ_dir: Direct peak (intantanious flood peak minus baseflow) in m³/s
+# PSI_SM: Runoff coefficient of the flood event WITH snowmelt+precipitation
+
+Floods_typed <- make_typing_of_floods(Floods = Sample_Flood_events, n_G = 3, Type_3_min_samplesize = 10)
+
+table(Floods_typed$Typ)
+Floods_Rain <- Floods_typed[Floods_typed$Typ %in% c("R1", "R2", "R3"),]
+
+library(ggplot2)
+ggplot(Floods_Rain)+
+  geom_point(aes(x=dir_Volume, y=HQ_dir, fill=Typ), colour="black", shape=21, size=2)+
+  scale_fill_manual(values = c("R1"="#D7191C", "R2"="#FDAE61", "R3"= "#1A9641"))
+```
+
