@@ -43,19 +43,19 @@ head(Flood_events)
 ```
 
     ##        Begin        End  Peak_date  DailyMQ   Volume dir_Volume baseflow_peak
-    ## 1 2000-01-20 2000-01-25 2000-01-23 19.00905 5.319835  3.4043803      4.625808
-    ## 2 2000-01-20 2000-01-22 2000-01-21 11.23816 1.709572  0.9709766      4.274280
-    ## 3 2000-01-22 2000-01-25 2000-01-23 19.00905 3.610263  2.9112856      1.797782
-    ## 4 2000-02-18 2000-02-24 2000-02-23 23.73575 6.394985  4.8884760      3.338760
-    ## 5 2000-02-18 2000-02-21 2000-02-19 10.35475 1.904518  1.1512636      2.689732
-    ## 6 2000-02-20 2000-02-24 2000-02-23 23.73575 4.490467  3.8761451      2.666327
+    ## 1 2000-01-26 2000-01-28 2000-01-27 30.60427 4.506806   2.644209     10.778915
+    ## 2 2000-02-09 2000-02-13 2000-02-11 17.73265 3.492782   2.296727      3.460807
+    ## 3 2000-02-26 2000-03-08 2000-03-01 22.65300 9.374362   6.435898      2.561523
+    ## 4 2000-02-26 2000-02-28 2000-02-27 16.45204 1.732740   1.421456      1.801411
+    ## 5 2000-02-28 2000-03-08 2000-03-01 22.65300 7.641622   5.683534      1.119164
+    ## 6 2000-03-09 2000-03-16 2000-03-11 25.64213 8.060056   7.424781      1.024097
     ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir    Comments
-    ## 1       3.474502     5.393345        1 NA     NA            
-    ## 2       3.474502     5.074057        1 NA     NA  first wave
-    ## 3       0.000000     5.393345        1 NA     NA second wave
-    ## 4       2.257046     3.555103        1 NA     NA            
-    ## 5       2.257046     3.555103        1 NA     NA  first wave
-    ## 6       0.000000     3.555103        1 NA     NA second wave
+    ## 1      8.8598209    12.698009        1 NA     NA            
+    ## 2      2.9411774     3.980437        1 NA     NA            
+    ## 3      1.1474012     5.036236        1 NA     NA            
+    ## 4      1.1474012     2.455421        1 NA     NA  first wave
+    ## 5      0.0000000     5.036236        1 NA     NA second wave
+    ## 6      0.9890412     1.111738        1 NA     NA
 
 ### Correction of flood events
 
@@ -91,17 +91,17 @@ print(c("Method1" = Date1, "Method2" = Date2))
 ```
 
     ##      Method1      Method2 
-    ## "2000-01-04" "2000-01-04"
+    ## "2000-01-15" "2000-01-15"
 
 ### Typing of flood events
 
 For the typing of the flood event, multiple characteristics for each
-flood event must be calculated before: \* Sum_SM: Sum of snowmelt during
-the floodevent in mm \* Sum_N: Sum of precipitation during the
-floodevent in mm \* dir_Volume: Direct volume of the flood event (Volume
-minus baseflow) in Mio. m³/s \* HQ_dir: Direct peak (instantaneous flood
-peak minus baseflow) in m³/s \* PSI_SM: Runoff coefficient of the flood
-event WITH snowmelt+precipitation
+flood event must be calculated before: \* Sum\_SM: Sum of snowmelt
+during the floodevent in mm \* Sum\_N: Sum of precipitation during the
+floodevent in mm \* dir\_Volume: Direct volume of the flood event
+(Volume minus baseflow) in Mio. m³/s \* HQ\_dir: Direct peak
+(instantaneous flood peak minus baseflow) in m³/s \* PSI\_SM: Runoff
+coefficient of the flood event WITH snowmelt+precipitation
 
 ``` r
 # Open the sample flood event data
@@ -145,13 +145,13 @@ ggplot(Floods_Rain)+
   scale_fill_manual(values = c("R1"="#D7191C", "R2"="#FDAE61", "R3"= "#1A9641"))
 ```
 
-![](Readme_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](Readme_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ### Typewise and combined return period estimation with the TMPS model
 
 For the TMPS model, multiple characteristics for each flood event must
-be present in the input Floods_typed: \* Peak_date: Date of the peak of
-the flood event \* HQ: Direct peak in m³/s \* Type: Flood type of the
+be present in the input Floods\_typed: \* Peak\_date: Date of the peak
+of the flood event \* HQ: Direct peak in m³/s \* Type: Flood type of the
 flood event, preferably as factor
 
 Also, a Discharge timeseries with a “Date” and “Discharge” is needed
@@ -228,7 +228,7 @@ ggplot(Results_melt)+
 
     ## Warning: Removed 6 row(s) containing missing values (geom_path).
 
-![](Readme_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](Readme_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # Calculate 

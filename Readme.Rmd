@@ -1,7 +1,7 @@
 ---
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm 
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,11 +16,11 @@ This package provides tools for:
 * Spatial interpolation of precipitation
 * Separation of storm events from precipitation timeseries
 * Flood event typology
-+ Typing of rain events by TQ-Value
-+ Typing of snow events by clustering
+  + Typing of rain events by TQ-Value
+  + Typing of snow events by clustering
 * TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS 
-+ typewise statistical estimate of return periods
-+ typewise statistical estimate of quantiles
+  + typewise statistical estimate of return periods
+  + typewise statistical estimate of quantiles
 
 ## Installation and usage
 
