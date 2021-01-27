@@ -12,7 +12,7 @@ This package provides tools for:
 -   Flood event typology
     -   Typing of rain events by TQ-Value
     -   Typing of snow events by clustering
--   TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS
+-   TMPS: Floodtype-based Mixture Model of Partial Duration Series
     -   typewise statistical estimate of return periods
     -   typewise statistical estimate of quantiles
 
@@ -46,20 +46,20 @@ Flood_events <- eventsep(dailyMQ)
 head(Flood_events)
 ```
 
-    ##        Begin        End  Peak_date  DailyMQ     Volume dir_Volume baseflow_peak
-    ## 1 2000-01-17 2000-03-04 2000-02-19 31.27708   38.01113   32.57269      1.450773
-    ## 2 2000-03-23 2003-12-29 2003-09-28 37.47189 1104.96320 -579.62896     20.139016
-    ## 3 2000-07-13 2001-01-20 2001-01-16 28.15187  162.93655  137.52295      2.890225
-    ## 4 2001-02-19 2001-03-27 2001-03-16 25.33856   28.22942   23.98727      1.693884
-    ## 5 2001-05-16 2001-06-28 2001-06-10 24.63863   36.01928   30.08109      1.716294
-    ## 6 2001-07-23 2001-08-20 2001-07-29 18.36500   20.20220   18.08763      1.054207
-    ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir Comments
-    ## 1      1.0633822    1.6151207        1 NA     NA         
-    ## 2      7.2790826   21.0604443       72 NA     NA         
-    ## 3      0.1307377    2.9492515       11 NA     NA overlaid
-    ## 4      0.5152271    2.2124934        2 NA     NA overlaid
-    ## 5      0.8738366    2.3228640        4 NA     NA overlaid
-    ## 6      1.1893053    0.5588475        1 NA     NA overlaid
+    ##        Begin        End  Peak_date  DailyMQ   Volume dir_Volume baseflow_peak
+    ## 1 2000-01-27 2000-02-01 2000-01-28 15.09574 3.091534   2.633198     1.0426755
+    ## 2 2000-01-27 2000-01-31 2000-01-28 15.09574 1.946475   1.579807     1.0457235
+    ## 3 2000-01-29 2000-02-01 2000-01-30 11.59834 1.145058   1.003607     0.3638143
+    ## 4 2000-02-01 2000-02-12 2000-02-05 18.03376 7.400337   5.940025     1.4151379
+    ## 5 2000-02-01 2000-02-04 2000-02-02 14.25475 1.783690   1.385423     1.3881633
+    ## 6 2000-02-03 2000-02-12 2000-02-05 18.03376 5.616648   4.846200     0.4403564
+    ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir    Comments
+    ## 1       1.030484     1.091443        1 NA     NA            
+    ## 2       1.030484     1.091443        1 NA     NA  first wave
+    ## 3       0.000000     1.091443        1 NA     NA second wave
+    ## 4       1.091443     1.981604        3 NA     NA            
+    ## 5       1.091443     1.981604        1 NA     NA  first wave
+    ## 6       0.000000     1.981604        2 NA     NA second wave
 
 ### Correction of flood events
 
@@ -95,7 +95,7 @@ print(c("Method1" = Date1, "Method2" = Date2))
 ```
 
     ##      Method1      Method2 
-    ## "2000-01-04" "2000-01-05"
+    ## "2000-01-14" "2000-01-14"
 
 ### Typing of flood events
 
@@ -187,23 +187,18 @@ TMPS_quantiles <- qTMPS(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
   Flood_events = Floods_typed, Daily_discharge = Discharge, 
   return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
 
+TMPS_quantiles <- as.data.frame(round(TMPS_quantiles,1))
+TMPS_quantiles[TMPS_quantiles < 0] <- NA
 TMPS_quantiles
 ```
 
-    ##                 2          5         10          20        25        50
-    ## TMPS    549.47952   708.2928   897.8590 1259.595304 1397.7360 1911.5217
-    ## R1       67.97982   236.4081   403.3624  623.690372  709.2526 1033.0840
-    ## R2      162.70548   402.2311   616.2980  876.384545  972.2912 1316.1713
-    ## R3   -20331.06676 -3982.4597 -1055.8595   -5.890942  165.1651  457.6625
-    ## S1      382.76268   472.8958   518.1573  553.210856  562.8823  588.9411
-    ## S2    -2367.98158  -239.8321   286.4022  525.593018  571.6013  661.6797
-    ##            100       200       500      1000
-    ## TMPS 2586.8131 3479.0707 5122.3917 6853.7263
-    ## R1   1468.9022 2056.6692 3160.7198 4341.5197
-    ## R2   1743.8436 2277.0708 3190.4865 4083.7582
-    ## R3    571.6516  616.4844  637.1909  642.3974
-    ## S1    610.0375  627.2005  645.1311  655.8382
-    ## S2    705.6182  727.2192  739.9945  744.1972
+    ##          2     5    10     20     25     50    100    200    500   1000
+    ## TMPS 549.5 708.3 897.9 1259.6 1397.7 1911.5 2586.8 3479.1 5122.4 6853.7
+    ## R1    68.0 236.4 403.4  623.7  709.3 1033.1 1468.9 2056.7 3160.7 4341.5
+    ## R2   162.7 402.2 616.3  876.4  972.3 1316.2 1743.8 2277.1 3190.5 4083.8
+    ## R3      NA    NA    NA     NA  165.2  457.7  571.7  616.5  637.2  642.4
+    ## S1   382.8 472.9 518.2  553.2  562.9  588.9  610.0  627.2  645.1  655.8
+    ## S2      NA    NA 286.4  525.6  571.6  661.7  705.6  727.2  740.0  744.2
 
 ``` r
 # Calculate the AMS with TWO SIMPLIFICATIONS FOR EASYNESS : 
@@ -219,9 +214,8 @@ suppressMessages(library(ggplot2))
 AMS_params <- gevFit(AMS, type="pwm")@fit$par.ests  
 AMS <- qgev(1-1/c(2,5,10,20,25,50,100,200,500,1000), mu=AMS_params[2], xi=AMS_params[1], beta=AMS_params[3])
 
-Results <- as.data.frame(rbind(TMPS_quantiles, AMS=AMS))
-Results[Results < 0] <- NA
-Results <- cbind(Results, "Method"=rownames(Results))
+Results <- rbind(TMPS_quantiles, AMS=AMS)
+Results <- cbind(Results, "Method" = rownames(Results))
 Results_melt <- melt(Results, id.vars = "Method", variable.name = "Annuality")
 Results_melt$Annuality <- as.numeric(as.character(Results_melt$Annuality))
 
@@ -245,27 +239,30 @@ ggplot(Results_melt)+
 TMPS_probs_from_AMS_quants <- pTMPS(q = AMS, 
   Flood_events = Floods_typed, Daily_discharge = Discharge, 
   return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
+
+TMPS_probs_from_AMS_quants[is.infinite(TMPS_probs_from_AMS_quants)] <- NA
+TMPS_probs_from_AMS_quants <- round(TMPS_probs_from_AMS_quants, 1)
 TMPS_probs_from_AMS_quants
 ```
 
     ##      410.243366436869 588.700179151269 736.69352773846 906.138726802705
-    ## TMPS         1.822065         2.416035        6.299805         10.18202
-    ## R1          10.252145        18.139515       26.741355         39.02185
-    ## R2           5.143333         9.208549       14.028988         21.46882
-    ## R3          42.321812       121.531047             Inf              Inf
-    ## S1           2.504886        49.644531             Inf              Inf
-    ## S2          13.421183        27.587468      359.750085              Inf
+    ## TMPS              1.8              2.4             6.3             10.2
+    ## R1               10.3             18.1            26.7             39.0
+    ## R2                5.1              9.2            14.0             21.5
+    ## R3               42.3            121.5              NA               NA
+    ## S1                2.5             49.6              NA               NA
+    ## S2               13.4             27.6           359.8               NA
     ##      966.324434322802 1173.97154113023 1417.99019205185 1705.56456617459
-    ## TMPS         11.56833         17.23996         25.79147         38.71494
-    ## R1           44.03284         64.03584         93.13863        135.59150
-    ## R2           24.66608         38.21834         59.82133         94.53598
-    ## R3                Inf              Inf              Inf              Inf
-    ## S1                Inf              Inf              Inf              Inf
-    ## S2                Inf              Inf              Inf              Inf
+    ## TMPS             11.6             17.2             25.8             38.7
+    ## R1               44.0             64.0             93.1            135.6
+    ## R2               24.7             38.2             59.8             94.5
+    ## R3                 NA               NA               NA               NA
+    ## S1                 NA               NA               NA               NA
+    ## S2                 NA               NA               NA               NA
     ##      2166.75357125051 2589.61044207795
-    ## TMPS         66.48178         100.2510
-    ## R1          223.14952         325.7015
-    ## R2          175.38196         282.3063
-    ## R3                Inf              Inf
-    ## S1                Inf              Inf
-    ## S2                Inf              Inf
+    ## TMPS             66.5            100.3
+    ## R1              223.1            325.7
+    ## R2              175.4            282.3
+    ## R3                 NA               NA
+    ## S1                 NA               NA
+    ## S2                 NA               NA

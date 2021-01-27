@@ -19,7 +19,7 @@ This package provides tools for:
 * Flood event typology
   + Typing of rain events by TQ-Value
   + Typing of snow events by clustering
-* TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS 
+* TMPS: Floodtype-based Mixture Model of Partial Duration Series 
   + typewise statistical estimate of return periods
   + typewise statistical estimate of quantiles
 
@@ -109,7 +109,9 @@ suppressMessages(library(ggplot2))
 ggplot(Floods_Rain)+
   geom_point(aes(x=dir_Volume, y=HQ_dir, fill=Type), colour="black", shape=21, size=2)+
   scale_fill_manual(values = c("R1"="#D7191C", "R2"="#FDAE61", "R3"= "#1A9641"))
+
 ```
+
 
 
 
@@ -121,6 +123,7 @@ For the TMPS model, multiple characteristics for each flood event must be presen
 * Type: Flood type of the flood event, preferably as factor
 
 Also, a Discharge timeseries with a "Date" and "Discharge" is needed
+
 ```{r}
 # Open the discharge data
 data("Discharge")
@@ -133,6 +136,8 @@ TMPS_quantiles <- qTMPS(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
   Flood_events = Floods_typed, Daily_discharge = Discharge, 
   return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
 
+TMPS_quantiles <- as.data.frame(round(TMPS_quantiles,1))
+TMPS_quantiles[TMPS_quantiles < 0] <- NA
 TMPS_quantiles
 
 # Calculate the AMS with TWO SIMPLIFICATIONS FOR EASYNESS : 
@@ -148,9 +153,8 @@ suppressMessages(library(ggplot2))
 AMS_params <- gevFit(AMS, type="pwm")@fit$par.ests  
 AMS <- qgev(1-1/c(2,5,10,20,25,50,100,200,500,1000), mu=AMS_params[2], xi=AMS_params[1], beta=AMS_params[3])
 
-Results <- as.data.frame(rbind(TMPS_quantiles, AMS=AMS))
-Results[Results < 0] <- NA
-Results <- cbind(Results, "Method"=rownames(Results))
+Results <- rbind(TMPS_quantiles, AMS=AMS)
+Results <- cbind(Results, "Method" = rownames(Results))
 Results_melt <- melt(Results, id.vars = "Method", variable.name = "Annuality")
 Results_melt$Annuality <- as.numeric(as.character(Results_melt$Annuality))
 
@@ -172,6 +176,9 @@ ggplot(Results_melt)+
 TMPS_probs_from_AMS_quants <- pTMPS(q = AMS, 
   Flood_events = Floods_typed, Daily_discharge = Discharge, 
   return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
+
+TMPS_probs_from_AMS_quants[is.infinite(TMPS_probs_from_AMS_quants)] <- NA
+TMPS_probs_from_AMS_quants <- round(TMPS_probs_from_AMS_quants, 1)
 TMPS_probs_from_AMS_quants
 
 ```
