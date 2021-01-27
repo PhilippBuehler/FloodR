@@ -66,5 +66,6 @@ they are created anew to consider every change in data availability.
 \author{
 Laura Haendel
 }
+\keyword{internal}
 \keyword{~classif}
 \keyword{~ts}

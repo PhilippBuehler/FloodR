@@ -5,6 +5,7 @@
 #'
 #' @param text which text to translate
 #' @author Philipp Bühler
+#' @keywords internal
 tr <- function(text){ # translates text into current language
   sapply(text,function(s) translation_list[[s]][[language]], USE.NAMES=FALSE)
 }
@@ -23,6 +24,7 @@ tr <- function(text){ # translates text into current language
 #' @param ... as in read.table
 #' @param date.formats date.formats are preformatted data formats
 #' @author Philipp Bühler
+#' @keywords internal
 my.read.table <- function(..., date.formats = c("%d.%m.%Y","%Y-%m-%d")) {
   dat <- utils::read.table(...,stringsAsFactors = FALSE)
   for (col.idx in seq_len(ncol(dat))) {
@@ -52,6 +54,7 @@ my.read.table <- function(..., date.formats = c("%d.%m.%Y","%Y-%m-%d")) {
 #' @param data data
 #' @param cname columnname to add
 #' @author Philipp Bühler
+#' @keywords internal
 fncols <- function(data, cname) {
   add <-cname[!cname%in%names(data)]
   if(length(add)!=0){
@@ -73,6 +76,7 @@ fncols <- function(data, cname) {
 #'
 #' @param Floods Flood table
 #' @param Q Discharge table
+#' @keywords internal
 #' @author Philipp Bühler
 calc_stats<- function(Floods,Q) {
   a=Floods$Begin
@@ -105,5 +109,3 @@ calc_stats<- function(Floods,Q) {
   }
   return(Floods)
 }
-
-

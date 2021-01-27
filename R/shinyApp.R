@@ -5,6 +5,7 @@
 #'
 #' @keywords Environments
 #' @export PKGENVIR
+#' @keywords internal
 PKGENVIR <- new.env(parent=emptyenv())
 
 

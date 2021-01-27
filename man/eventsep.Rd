@@ -236,6 +236,10 @@ Klein, B. (2009): Ermittlung von Ganglinien für die
 risikoorientierte Hochwasserbemessung von Talsperren. Schriftenreihe des
 Lehrstuhls Hydrologie, Wasserwirtschaft und Umwelttechnik, Ruhr-University
 Bochum.
+
+Fischer, S., Schumann, A., & Bühler, P. (2019):
+Timescale-based flood typing to estimate temporal changes in flood frequencies.
+ Hydrological Sciences Journal, 64(15), 1867–1892. https://doi.org/10.1080/02626667.2019.1679376
 }
 \author{
 Svenja Fischer

@@ -17,3 +17,4 @@ Internal function. Calculating flood statistics for output in GUI and table
 \author{
 Philipp Bühler
 }
+\keyword{internal}

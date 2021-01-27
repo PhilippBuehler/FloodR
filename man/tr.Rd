@@ -15,3 +15,4 @@ Internal Function. Translates text in Shiny (German <-> English)
 \author{
 Philipp Bühler
 }
+\keyword{internal}

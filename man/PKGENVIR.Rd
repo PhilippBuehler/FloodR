@@ -18,3 +18,4 @@ Environment for Shiny
 Environment for Shiny
 }
 \keyword{Environments}
+\keyword{internal}

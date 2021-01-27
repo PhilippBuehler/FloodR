@@ -1,10 +1,3 @@
-#M1 Test for independence
-
-
-
-
-
-
 #' Determine the begin of event precipitation
 #'
 #' The cumulative precipitation is used to estimate the begin of the event
@@ -38,7 +31,7 @@
 #' had to consist of at least three days.  The end of the event precipitation
 #' was defined equally to one day before the end of flood event.
 #'
-#' @param X A dataframe with the first column equal to the date (d.m.Y) and the
+#' @param Prec_table A dataframe with the first column equal to the date and the
 #' second column consisting of the daily precipitation sums [mm].
 #' @param indT An integer vector with three entries: first the index of date in
 #' X of the begin of the flood event, second the index of date in X of the end
@@ -63,9 +56,11 @@
 #' }
 #'
 #' @export PreconeCP
-PreconeCP<-function(X,indT,min_step=3){
+PreconeCP<-function(Prec_table,indT,min_step=3){
+  X <- Prec_table
+
   X[,2]<-cumsum(X[,2])
-  X[,1]<-X[,1]
+
   s1=numeric()
   s2=numeric()
   for (j in (min_step:(indT[1]-1))){
@@ -77,16 +72,8 @@ PreconeCP<-function(X,indT,min_step=3){
 
   }
 
-  P_M1=data.frame(x=X[c((xwm+1)),1])
-
-  return(P_M1)
+  return(X[c((xwm+1)),1])
 }
-
-
-  #M2 Test3dim
-
-
-
 
 
 
@@ -111,7 +98,7 @@ PreconeCP<-function(X,indT,min_step=3){
 #' maximal, are chosen as change points. The begin of the event precipitation
 #' then is defined as the first of these two change points.
 #'
-#' @param X A dataframe with the first column equal to the date (d.m.Y) and the
+#' @param Prec_table A dataframe with the first column equal to the date and the
 #' second column consisting of the daily precipitation sums [mm].
 #' @param indT An integer vector with three entries: first the index of date in
 #' X of the begin of the flood event, second the index of date in X of the end
@@ -128,19 +115,18 @@ PreconeCP<-function(X,indT,min_step=3){
 #' @keywords ~classif ~ts
 #' @examples
 #' \dontrun{
-#'
 #' dailyprec<-data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
 #' to=as.Date("30.04.2000", format="%d.%m.%Y"), by="days"),
 #' discharge=rbeta(121,2,20)*100)
 #' indT<-c(15,30,14+which.max(dailyprec[15:30,2]))
-#'
 #' PrectwoCP(X=dailyprec,indT)
 #' }
 #'
 #' @export PrectwoCP
-PrectwoCP<-function(X,indT,s_p=4,min_step=3){
+PrectwoCP<-function(Prec_table, indT, s_p=4, min_step=3){
+  X <- Prec_table
   X[,2]<-cumsum(X[,2])
-  X[,1]<-as.Date(X[,1], format="%d.%m.%Y")
+
   Mat_3=matrix(data=NA,nrow=length(1:(indT[3]+s_p)),ncol=length(1:(indT[3]+s_p)))
   s1=numeric()
   s2=numeric()
@@ -163,9 +149,7 @@ PrectwoCP<-function(X,indT,s_p=4,min_step=3){
   }
 
   Mat_3[is.infinite(Mat_3)]=9999
-  #Exp
   xwm=which(Mat_3 == min(Mat_3, na.rm=TRUE), arr.ind = TRUE)
-  P_M2=data.frame(x=X[c((xwm[1]+1)),1])
 
-  return(P_M2)
+  return(X[c((xwm[1]+1)),1])
 }

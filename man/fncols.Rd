@@ -17,3 +17,4 @@ Internal function. Adds Column to dataframe if nonexcistend
 \author{
 Philipp Bühler
 }
+\keyword{internal}

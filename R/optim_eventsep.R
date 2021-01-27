@@ -12,7 +12,7 @@ opt_fun <- function(par, Discharge, Q_upper, Q_lower, lower_tolerance, NA_mode, 
     theta = param_set["theta"], ddur = param_set["ddur"], omega = param_set["omega"],
     Kappa = param_set["Kappa"], eta = param_set["eta"], delta = param_set["delta"], NA_mode = NA_mode)))
 
-    Floods$ID <- 1:nrow(Floods)
+  Floods$ID <- 1:nrow(Floods)
   Floods_seq <- Floods[,.(Datum=seq(Begin,End, by="days")),by=c("ID")]
   Floods_seq$is_Flood <- TRUE
 
@@ -59,31 +59,33 @@ opt_fun <- function(par, Discharge, Q_upper, Q_lower, lower_tolerance, NA_mode, 
 optimize_floodsep_parameters <- function(params, Discharge,
   upper_TH=0.95, lower_TH=0.5, lower_tolerance=0.01, NA_mode=NULL){
 
-  par_names <- names(params)
+  if(requireNamespace("rgenoud")){
+    par_names <- names(params)
 
-  lower_param_bound <- c(dvar=2,gamma=0, theta=0, ddur=1, omega=0, Kappa=0, eta=0, delta=0)[par_names]
-  upper_param_bound <- c(dvar=8,gamma=4, theta=1, ddur=200, omega=5, Kappa=3, eta=1, delta=3)[par_names]
-  param_types <- c(dvar="integer",gamma="numeric", theta="numeric", ddur="integer", omega="integer",
-    Kappa="numeric", eta="numeric", delta="numeric")[par_names]
+    lower_param_bound <- c(dvar=2,gamma=0, theta=0, ddur=1, omega=0, Kappa=0, eta=0, delta=0)[par_names]
+    upper_param_bound <- c(dvar=8,gamma=4, theta=1, ddur=200, omega=5, Kappa=3, eta=1, delta=3)[par_names]
+    param_types <- c(dvar="integer",gamma="numeric", theta="numeric", ddur="integer", omega="integer",
+      Kappa="numeric", eta="numeric", delta="numeric")[par_names]
 
-  if(all(param_types %in% "integer")){
-    mode <- "integer"
-  }else if(all(param_types %in% "numeric")){
-    mode <- "numeric"
-  }else{
-    stop("Only parameter sets with the same data type (all integer OR all numeric) can be optimized!")
+    if(all(param_types %in% "integer")){
+      mode <- "integer"
+    }else if(all(param_types %in% "numeric")){
+      mode <- "numeric"
+    }else{
+      stop("Only parameter sets with the same data type (all integer OR all numeric) can be optimized!")
+    }
+
+    Q_upper <- quantile(Discharge$Abfluss, upper_TH,na.rm = TRUE)
+    Q_lower <- quantile(Discharge$Abfluss, lower_TH,na.rm = TRUE)
+
+
+    res <- rgenoud::genoud(fn=opt_fun, nvars=length(params), data.type.int=fifelse(mode=="integer",TRUE,FALSE),
+      max.generations=20,pop.size = 100,
+      Domains =cbind(lower_param_bound, upper_param_bound), Discharge=Discharge, Q_upper=Q_upper, Q_lower=Q_lower,
+      lower_tolerance=lower_tolerance, NA_mode=NA_mode, par_names=par_names,mode == "numeric")
+
+    return(list(Parameter=res$par, Goodness=(1-res$value)))
   }
-
-  Q_upper <- quantile(Discharge$Abfluss, upper_TH,na.rm = TRUE)
-  Q_lower <- quantile(Discharge$Abfluss, lower_TH,na.rm = TRUE)
-
-
-  res <- rgenoud::genoud(fn=opt_fun, nvars=length(params), data.type.int=fifelse(mode=="integer",TRUE,FALSE),
-    max.generations=20,pop.size = 100,
-    Domains =cbind(lower_param_bound, upper_param_bound), Discharge=Discharge, Q_upper=Q_upper, Q_lower=Q_lower,
-    lower_tolerance=lower_tolerance, NA_mode=NA_mode, par_names=par_names,mode == "numeric")
-
-  return(list(Parameter=res$par, Goodness=(1-res$value)))
 }
 
 

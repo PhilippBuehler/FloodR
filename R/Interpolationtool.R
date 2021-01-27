@@ -21,7 +21,7 @@
 #' easting, the minimal northing and the maximal northing in this order.}
 #' @author Laura Haendel
 #' @keywords ~classif ~ts
-#'
+#' @keywords internal
 min_max_coordinates <- function(Station_list, Area,coordinates){
   #Koordinatenpunkte aller Gebiete einlesen um minimale und maximale Rechts- und Hochwerte f?r die Voronoi-Polygone zu haben
   min_e <- list()
@@ -99,7 +99,7 @@ min_max_coordinates <- function(Station_list, Area,coordinates){
 #' @import spatstat
 #' @author Laura Haendel
 #' @keywords ~classif ~ts
-#'
+#' @keywords internal
 create_voronoi <- function(stations,z,Days,Station_list,limits_voronoi,coordinates,YY,All_Days,Area){
   #Erzeugung der Voronoi-Polygone
 

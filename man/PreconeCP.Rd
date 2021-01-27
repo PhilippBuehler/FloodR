@@ -4,10 +4,10 @@
 \alias{PreconeCP}
 \title{Determine the begin of event precipitation}
 \usage{
-PreconeCP(X, indT, min_step = 3)
+PreconeCP(Prec_table, indT, min_step = 3)
 }
 \arguments{
-\item{X}{A dataframe with the first column equal to the date (d.m.Y) and the
+\item{Prec_table}{A dataframe with the first column equal to the date and the
 second column consisting of the daily precipitation sums [mm].}
 
 \item{indT}{An integer vector with three entries: first the index of date in

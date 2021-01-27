@@ -17,3 +17,4 @@ Internal function. reads table and covnerts string to date
 \author{
 Philipp Bühler
 }
+\keyword{internal}

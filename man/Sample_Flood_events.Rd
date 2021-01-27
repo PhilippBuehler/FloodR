@@ -5,7 +5,7 @@
 \alias{Sample_Flood_events}
 \title{Sample dataset of flood events}
 \format{
-An object of class \code{data.frame} with 149 rows and 10 columns.
+An object of class \code{data.frame} with 149 rows and 11 columns.
 }
 \usage{
 data(Sample_Flood_events)

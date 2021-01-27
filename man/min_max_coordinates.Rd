@@ -34,5 +34,6 @@ eastings and northings of all these coordinates are determined.
 \author{
 Laura Haendel
 }
+\keyword{internal}
 \keyword{~classif}
 \keyword{~ts}

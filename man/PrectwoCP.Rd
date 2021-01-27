@@ -4,10 +4,10 @@
 \alias{PrectwoCP}
 \title{Determine the begin of event precipitation}
 \usage{
-PrectwoCP(X, indT, s_p = 4, min_step = 3)
+PrectwoCP(Prec_table, indT, s_p = 4, min_step = 3)
 }
 \arguments{
-\item{X}{A dataframe with the first column equal to the date (d.m.Y) and the
+\item{Prec_table}{A dataframe with the first column equal to the date and the
 second column consisting of the daily precipitation sums [mm].}
 
 \item{indT}{An integer vector with three entries: first the index of date in
@@ -49,12 +49,10 @@ then is defined as the first of these two change points.
 }
 \examples{
 \dontrun{
-
 dailyprec<-data.frame(Date=seq(from=as.Date("01.01.2000", format="\%d.\%m.\%Y"),
 to=as.Date("30.04.2000", format="\%d.\%m.\%Y"), by="days"),
 discharge=rbeta(121,2,20)*100)
 indT<-c(15,30,14+which.max(dailyprec[15:30,2]))
-
 PrectwoCP(X=dailyprec,indT)
 }
 

@@ -1,1 +1,1 @@
-{"active_set":"","sets":[]}
+{"active_set":"Diagnostics","sets":[{"name":"Diagnostics","base_path":"","markers":[{"type":0,"path":"V:/GitHub_Repos/FloodR/R/SMPS.R","line":173,"column":52,"message":"expected &#x27;,&#x27; after expression","log_path":"","log_line":-1,"show_error_list":true}]}]}
