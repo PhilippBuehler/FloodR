@@ -1,6 +1,6 @@
 Package: FloodR
 Type: Package
-Title: Separation of Flood Event and Event Precipitation
+Title: Separation and typing of flood events and typewise staistical return periods (TMPS)
 Version: 0.6.0
 Authors@R: c(person("Philipp", "Buehler", email = "philipp.buehler@rub.de",role = c("aut", "cre")), person("Svenja", "Fischer", email = "svenja.fischer@rub.de",role = c("aut")), person("Laura", "Haendel", email = "laura.haendel@rub.de",role = c("aut")))
 Maintainer: Philipp Buehler <philipp.buehler@rub.de>

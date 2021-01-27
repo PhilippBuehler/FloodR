@@ -1,21 +1,21 @@
-#' Apply the SMPS model to a set of data for a typewise statistical estimate of return periods
-#' as well as a combined SMPS return period. See reference Fischer (2018)
+#' Apply the TMPS model to a set of data for a typewise statistical estimate of return periods
+#' as well as a combined TMPS return period. See reference Fischer (2018)
 #'
 #' @param Flood_events data.frame: Floods events with the columns "Peak_date" (Date format), "HQ" (numeric) and "Type" (factor)
 #' @param Daily_discharge data.frame: Daily discharge (continuous) with columns "Date (Date format) and "Discharge" (numeric)
 #' @param return_period The points (as years of return period) where the quantiles should be calculated
 #' @param Threshold_Q numeric: Peak of Threshold, defaults to 3
-#' @param return_types character vector: What should be returned. Any combination of "SMPS" and the occuring floodtypes
+#' @param return_types character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes
 #' @author Svenja Fischer
 #' @author Philipp Bühler
 #' @references Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
 #' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
 #' @import fExtremes
 #' @importFrom tibble has_name
-#' @export SMPS_model
+#' @export TMPS_model
 #'
-SMPS_model <- function(Flood_events, Daily_discharge, return_period = c(2,5,10,20,25,50,100,200,500,1000),
-  return_types = c("SMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = 3){
+TMPS_model <- function(Flood_events, Daily_discharge, return_period = c(2,5,10,20,25,50,100,200,500,1000),
+  return_types = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = 3){
 
   stopifnot(any(class(Flood_events$Type) %in% c("factor", "character")))
 
@@ -119,7 +119,7 @@ SMPS_model <- function(Flood_events, Daily_discharge, return_period = c(2,5,10,2
     }else if(temp_return %in% g_invalid){
       R[i,] <- rep(as.numeric(NA), length(return_period))
 
-    }else if(temp_return == "SMPS"){
+    }else if(temp_return == "TMPS"){
       R[i,] <- sapply(return_period, function(x) qPOT_mixmixPOT(x,params_POT, TH, params, antseas, g_valid))
 
     }else{

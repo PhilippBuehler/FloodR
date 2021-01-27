@@ -48,7 +48,7 @@ Flood_typology <- function(Floods, n_G = 3L, fast_composition = FALSE,
     mat <- mat[apply(mat,1,function(x) all(x >= min_sampleSize)),]
   }else{
     min_sampleSize <- c(rep(ceiling(n/(n_G*2)), (n_G-1)), Type_3_min_samplesize)
-    mat <- mat[apply(mat,1,function(x) all(x >= min_sampleSize)),]
+    mat <- mat[apply(mat,1,function(x) all(x >= (min_sampleSize+1))),]
   }
 
   Comb <- cbind(0, mat)
