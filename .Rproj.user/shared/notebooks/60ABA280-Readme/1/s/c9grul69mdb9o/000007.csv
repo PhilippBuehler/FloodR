@@ -1,5 +1,0 @@
-"0","SMPS_results <- SMPS_model(Floods_typed, Discharge, return_Types = c(""SMPS"", ""R1"", ""R2"", ""R3"", ""S1"", ""S2""))
-"
-"2","Fehler in SMPS_model(Floods_typed, Discharge, return_Types = c(""SMPS"",  : 
-  unbenutztes Argument (return_Types = c(""SMPS"", ""R1"", ""R2"", ""R3"", ""S1"", ""S2""))
-"

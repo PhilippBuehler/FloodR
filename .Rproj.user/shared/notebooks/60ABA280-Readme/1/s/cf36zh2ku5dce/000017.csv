@@ -1,5 +1,0 @@
-"0","Date1 <- PreconeCP(Prec_table = dailyprec, indT = indT)
-"
-"2","Fehler in PreconeCP(Prec_table = dailyprec, indT = indT) : 
-  unbenutztes Argument (Prec_table = dailyprec)
-"
