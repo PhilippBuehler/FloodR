@@ -45,19 +45,19 @@ head(Flood_events)
 ```
 
     ##        Begin        End  Peak_date  DailyMQ    Volume dir_Volume baseflow_peak
-    ## 1 2000-01-13 2000-01-25 2000-01-17 19.57008 10.855453   7.119873     3.2532666
-    ## 2 2000-01-13 2000-01-19 2000-01-15 14.89113  4.609607   2.741817     3.2532666
-    ## 3 2000-01-16 2000-01-25 2000-01-17 13.10824  6.245846   4.437086     0.5169067
-    ## 4 2000-02-01 2000-02-03 2000-02-02 16.86554  2.575295   1.457183     6.4705565
-    ## 5 2000-02-18 2000-03-17 2000-03-14 24.11330 24.333194  20.158929     2.0897230
-    ## 6 2000-02-18 2000-03-15 2000-02-20 22.24649 21.029422  17.153320     1.3332039
+    ## 1 2000-01-14 2000-01-19 2000-01-17 16.58258  4.140737  3.2349705      2.235805
+    ## 2 2000-01-24 2000-01-30 2000-01-29 26.40476  6.205777  5.1118017      2.417955
+    ## 3 2000-01-24 2000-01-29 2000-01-26 14.18981  3.924406  3.0127595      2.017994
+    ## 4 2000-01-28 2000-01-30 2000-01-29 23.83298  2.281371  2.0591691      1.285893
+    ## 5 2000-02-22 2000-02-29 2000-02-29 33.72785 10.474443 -0.6745755     33.727846
+    ## 6 2000-03-01 2000-03-20 2000-03-05 18.89600 14.903041 10.7933008      2.099632
     ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir    Comments
-    ## 1       2.553820     4.652160        1 NA     NA            
-    ## 2       2.553820     4.652160        1 NA     NA  first wave
-    ## 3       0.000000     4.652160        1 NA     NA second wave
-    ## 4       5.374761     7.566352        1 NA     NA            
-    ## 5       1.261882     2.189064        3 NA     NA            
-    ## 6       1.261882     2.189064        3 NA     NA  first wave
+    ## 1       1.401067     2.792297        1 NA     NA            
+    ## 2       1.648800     2.571786        1 NA     NA            
+    ## 3       1.648800     2.571786        1 NA     NA  first wave
+    ## 4       0.000000     2.571786        1 NA     NA second wave
+    ## 5       3.140602    33.727846        1 NA     NA            
+    ## 6       1.805912     3.201082        1 NA     NA
 
 ``` r
 # The Separation might still contain overlaid flood events which need to be corrected
@@ -91,7 +91,7 @@ print(c("Method1" = Date1, "Method2" = Date2))
 ```
 
     ##      Method1      Method2 
-    ## "2000-01-07" "2000-01-15"
+    ## "2000-01-15" "2000-01-04"
 
 ### Typing of flood events
 
@@ -178,25 +178,7 @@ SMPS_results <- SMPS_model(Floods_typed, Discharge, return_types = c("SMPS", "R1
 
 AMS <- aggregate((Discharge$Discharge*1.1), list(as.numeric(format(Discharge$Date,"%Y"))), max, na.rm=TRUE)$x
 
-library(fExtremes)
-```
-
-    ## Loading required package: timeDate
-
-    ## Loading required package: timeSeries
-
-    ## Loading required package: fBasics
-
-    ## 
-    ## Attaching package: 'fBasics'
-
-    ## The following object is masked from 'package:FloodR':
-    ## 
-    ##     tr
-
-    ## Loading required package: fGarch
-
-``` r
+suppressMessages(library(fExtremes))
 library(reshape2)
 AMS_params <- gevFit(AMS, type="pwm")@fit$par.ests  
 AMS <- qgev(1-1/c(2,5,10,20,25,50,100,200,500,1000), mu=AMS_params[2], xi=AMS_params[1], beta=AMS_params[3])

@@ -125,7 +125,7 @@ SMPS_results <- SMPS_model(Floods_typed, Discharge, return_types = c("SMPS", "R1
 
 AMS <- aggregate((Discharge$Discharge*1.1), list(as.numeric(format(Discharge$Date,"%Y"))), max, na.rm=TRUE)$x
 
-library(fExtremes)
+suppressMessages(library(fExtremes))
 library(reshape2)
 AMS_params <- gevFit(AMS, type="pwm")@fit$par.ests  
 AMS <- qgev(1-1/c(2,5,10,20,25,50,100,200,500,1000), mu=AMS_params[2], xi=AMS_params[1], beta=AMS_params[3])
