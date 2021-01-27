@@ -4,13 +4,17 @@
 
 ## Description
 
-This package provides tools for: \* Separation of flood events from
-discharge timeseries \* Spatial interpolation of precipitation \*
-Separation of storm events from precipitation timeseries \* Flood event
-typology + Typing of rain events by TQ-Value + Typing of snow events by
-clustering \* TMPS: Floodtype-based Mixture Model of Partial Duration
-Series TMPS + typewise statistical estimate of return periods + typewise
-statistical estimate of quantiles
+This package provides tools for:
+
+-   Separation of flood events from discharge timeseries
+-   Spatial interpolation of precipitation
+-   Separation of storm events from precipitation timeseries
+-   Flood event typology
+    -   Typing of rain events by TQ-Value
+    -   Typing of snow events by clustering
+-   TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS
+    -   typewise statistical estimate of return periods
+    -   typewise statistical estimate of quantiles
 
 ## Installation and usage
 
@@ -42,20 +46,20 @@ Flood_events <- eventsep(dailyMQ)
 head(Flood_events)
 ```
 
-    ##        Begin        End  Peak_date  DailyMQ   Volume dir_Volume baseflow_peak
-    ## 1 2000-01-26 2000-01-28 2000-01-27 30.60427 4.506806   2.644209     10.778915
-    ## 2 2000-02-09 2000-02-13 2000-02-11 17.73265 3.492782   2.296727      3.460807
-    ## 3 2000-02-26 2000-03-08 2000-03-01 22.65300 9.374362   6.435898      2.561523
-    ## 4 2000-02-26 2000-02-28 2000-02-27 16.45204 1.732740   1.421456      1.801411
-    ## 5 2000-02-28 2000-03-08 2000-03-01 22.65300 7.641622   5.683534      1.119164
-    ## 6 2000-03-09 2000-03-16 2000-03-11 25.64213 8.060056   7.424781      1.024097
-    ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir    Comments
-    ## 1      8.8598209    12.698009        1 NA     NA            
-    ## 2      2.9411774     3.980437        1 NA     NA            
-    ## 3      1.1474012     5.036236        1 NA     NA            
-    ## 4      1.1474012     2.455421        1 NA     NA  first wave
-    ## 5      0.0000000     5.036236        1 NA     NA second wave
-    ## 6      0.9890412     1.111738        1 NA     NA
+    ##        Begin        End  Peak_date  DailyMQ     Volume dir_Volume baseflow_peak
+    ## 1 2000-01-17 2000-03-04 2000-02-19 31.27708   38.01113   32.57269      1.450773
+    ## 2 2000-03-23 2003-12-29 2003-09-28 37.47189 1104.96320 -579.62896     20.139016
+    ## 3 2000-07-13 2001-01-20 2001-01-16 28.15187  162.93655  137.52295      2.890225
+    ## 4 2001-02-19 2001-03-27 2001-03-16 25.33856   28.22942   23.98727      1.693884
+    ## 5 2001-05-16 2001-06-28 2001-06-10 24.63863   36.01928   30.08109      1.716294
+    ## 6 2001-07-23 2001-08-20 2001-07-29 18.36500   20.20220   18.08763      1.054207
+    ##   baseflow_begin baseflow_end No_Peaks HQ HQ_dir Comments
+    ## 1      1.0633822    1.6151207        1 NA     NA         
+    ## 2      7.2790826   21.0604443       72 NA     NA         
+    ## 3      0.1307377    2.9492515       11 NA     NA overlaid
+    ## 4      0.5152271    2.2124934        2 NA     NA overlaid
+    ## 5      0.8738366    2.3228640        4 NA     NA overlaid
+    ## 6      1.1893053    0.5588475        1 NA     NA overlaid
 
 ### Correction of flood events
 
@@ -91,17 +95,21 @@ print(c("Method1" = Date1, "Method2" = Date2))
 ```
 
     ##      Method1      Method2 
-    ## "2000-01-15" "2000-01-15"
+    ## "2000-01-04" "2000-01-05"
 
 ### Typing of flood events
 
 For the typing of the flood event, multiple characteristics for each
-flood event must be calculated before: \* Sum\_SM: Sum of snowmelt
-during the floodevent in mm \* Sum\_N: Sum of precipitation during the
-floodevent in mm \* dir\_Volume: Direct volume of the flood event
-(Volume minus baseflow) in Mio. m³/s \* HQ\_dir: Direct peak
-(instantaneous flood peak minus baseflow) in m³/s \* PSI\_SM: Runoff
-coefficient of the flood event WITH snowmelt+precipitation
+flood event must be calculated before:
+
+-   Sum\_SM: Sum of snowmelt during the floodevent in mm
+-   Sum\_N: Sum of precipitation during the floodevent in mm
+-   dir\_Volume: Direct volume of the flood event (Volume minus
+    baseflow) in Mio. m³/s
+-   HQ\_dir: Direct peak (instantaneous flood peak minus baseflow) in
+    m³/s
+-   PSI\_SM: Runoff coefficient of the flood event WITH snowmelt +
+    precipitation
 
 ``` r
 # Open the sample flood event data
@@ -150,9 +158,11 @@ ggplot(Floods_Rain)+
 ### Typewise and combined return period estimation with the TMPS model
 
 For the TMPS model, multiple characteristics for each flood event must
-be present in the input Floods\_typed: \* Peak\_date: Date of the peak
-of the flood event \* HQ: Direct peak in m³/s \* Type: Flood type of the
-flood event, preferably as factor
+be present in the input Floods\_typed:
+
+-   Peak\_date: Date of the peak of the flood event
+-   HQ: Direct peak in m³/s
+-   Type: Flood type of the flood event, preferably as factor
 
 Also, a Discharge timeseries with a “Date” and “Discharge” is needed
 

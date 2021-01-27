@@ -12,6 +12,7 @@ output:
 
 ## Description
 This package provides tools for:
+
 * Separation of flood events from discharge timeseries
 * Spatial interpolation of precipitation
 * Separation of storm events from precipitation timeseries
@@ -84,11 +85,13 @@ print(c("Method1" = Date1, "Method2" = Date2))
 
 ### Typing of flood events
 For the typing of the flood event, multiple characteristics for each flood event must be calculated before:
+
 * Sum_SM: Sum of snowmelt during the floodevent in mm
 * Sum_N: Sum of precipitation during the floodevent in mm
 * dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s
 * HQ_dir: Direct peak (instantaneous flood peak minus baseflow) in m³/s
-* PSI_SM: Runoff coefficient of the flood event WITH snowmelt+precipitation
+* PSI_SM: Runoff coefficient of the flood event WITH snowmelt + precipitation
+
 ```{r}
 # Open the sample flood event data
 data("Sample_Flood_events")
@@ -112,6 +115,7 @@ ggplot(Floods_Rain)+
 
 ### Typewise and combined return period estimation with the TMPS model
 For the TMPS model, multiple characteristics for each flood event must be present in the input Floods_typed:
+
 * Peak_date: Date of the peak of the flood event
 * HQ: Direct peak in m³/s
 * Type: Flood type of the flood event, preferably as factor
