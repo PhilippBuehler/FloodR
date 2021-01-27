@@ -8,9 +8,10 @@ as well as a combined TMPS return period. See reference Fischer (2018)}
 TMPS_model(
   Flood_events,
   Daily_discharge,
-  return_period = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
-  return_types = c("TMPS", "R1", "R2", "R3", "S1", "S2"),
-  Threshold_Q = 3
+  return_TMPS,
+  Threshold_Q,
+  p_input = NULL,
+  q_input = NULL
 )
 }
 \arguments{
@@ -18,22 +19,21 @@ TMPS_model(
 
 \item{Daily_discharge}{data.frame: Daily discharge (continuous) with columns "Date (Date format) and "Discharge" (numeric)}
 
-\item{return_period}{The points (as years of return period) where the quantiles should be calculated}
-
-\item{return_types}{character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes}
+\item{return_TMPS}{character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes}
 
 \item{Threshold_Q}{numeric: Peak of Threshold, defaults to 3}
+
+\item{p_input}{The points (as years of return period) where the quantiles should be calculated}
+
+\item{q_input}{Probabilities to calculate the quantiles for}
 }
 \description{
 Apply the TMPS model to a set of data for a typewise statistical estimate of return periods
 as well as a combined TMPS return period. See reference Fischer (2018)
-}
-\references{
-Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
-event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
 }
 \author{
 Svenja Fischer
 
 Philipp Bühler
 }
+\keyword{internal}

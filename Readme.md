@@ -1,20 +1,23 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# FloodR Package
+# FloodR
 
 ## Description
+This package provides tools for:
+* Separation of flood events from discharge timeseries
+* Spatial interpolation of precipitation
+* Separation of storm events from precipitation timeseries
+* Flood event typology
+    + Typing of rain events by TQ-Value
+    + Typing of snow events by clustering
+* TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS 
+    + typewise statistical estimate of return periods
+    + typewise statistical estimate of quantiles
 
-Flood event separation on the basis of daily and hourly mean discharges
-using a variance based threshold. The monthly maximum discharges are
-used as peak values. To define the event separation, first an
-interpolation algorithm based on Thiessen polygons is used to transform
-station precipitation into areal precipitation. With the areal
-precipitation, the event precipitation for each event can be defined
-using a change-point based approach applied to slope of the cummulative
-sums of the precipitation.
+
 
 ## Installation and Usage
-
+First, install the newest version of Floodr from GitHub
 ``` r
 devtools::install_github(repo = "PhilippBuehler/FloodR")
 ```

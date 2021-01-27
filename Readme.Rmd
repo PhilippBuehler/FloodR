@@ -8,64 +8,70 @@ output:
 
 
 
-# FloodR Package
+# FloodR
 
 ## Description
-Flood event separation on the basis of daily and hourly mean discharges using a variance based threshold. The monthly maximum discharges are used as peak values. To define the event separation, first an interpolation algorithm based on Thiessen polygons is used to transform station precipitation into areal precipitation. With the areal precipitation, the event precipitation for each event can be defined using a change-point based approach applied to slope of the cummulative sums of the precipitation.
+This package provides tools for:
+* Separation of flood events from discharge timeseries
+* Spatial interpolation of precipitation
+* Separation of storm events from precipitation timeseries
+* Flood event typology
++ Typing of rain events by TQ-Value
++ Typing of snow events by clustering
+* TMPS: Floodtype-based Mixture Model of Partial Duration Series TMPS 
++ typewise statistical estimate of return periods
++ typewise statistical estimate of quantiles
 
-
-## Installation and Usage
+## Installation and usage
 
 ```{r, eval = FALSE}
 devtools::install_github(repo = "PhilippBuehler/FloodR")
 ```
 
-
-
-### Separation of Flood events
 ```{r}
 library("FloodR")
+```
+
+
+### Separation of flood events
+For the separation of flood events from a discharge timeseries, we need the daily discharge. 
+```{r}
 # Create a data.frame with continuous daily discharge
 dailyMQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
   to=as.Date("01.01.2004", format="%d.%m.%Y"), by="days"),
   discharge=rbeta(1462,2,20)*100)
 
-# Create a data.frame with monthly maximum peak values
-monthlyHQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
-  to=as.Date("01.01.2004", format="%d.%m.%Y"), by="months"),
-  discharge=dailyMQ$discharge[(0:48)*12+1]+rnorm(49,5,1))
-
 #Run the separation
 Flood_events <- eventsep(dailyMQ, monthlyHQ)
+# The Separation might still contain overlaid flood events which need to be corrected
 head(Flood_events)
 
-# The Separation might still contain overlaid flood events which need to be corrected
 ```
 
 
 
-### Correction of Flood events
+### Correction of flood events
+Run the Web separation on the dummy Catchment
+As input to the function a minimum of discharge data is used. The Flood event tables can be opened from within the User-Interface
 ```{r, eval = FALSE}
-# Run the Web separation on the dummy Catchment
-# As input to the function a minimum of discharge data is used. The Flood event tables can be opened from within the User-Interface
-library("FloodR")
-
 Run_WebFlood()
 
 ```
 
 
-### Separation of Precipitation
-```{r}
-# After the flood events are corrected (if needed), the precipitation belonging to flood event need to be estimated
-# For the both functions, a daily precipitation timeseries is needed, as well as  the parameter indT, which has the position indices of begin, end and peak of the FLOOD event as vector.
-library("FloodR")
 
+### Separation of precipitation
+After the flood events are corrected (if needed), the precipitation belonging to flood event need to be estimated
+For the both functions, a daily precipitation timeseries is needed, as well as  the parameter indT, which has the position indices of begin, end and peak of the FLOOD event as vector.
+```{r}
+# create a sample dataset
 dailyprec <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
   to=as.Date("30.04.2000", format="%d.%m.%Y"), by="days"),
   discharge=rbeta(121,2,20)*100)
-indT <- c(15,30,14+which.max(dailyprec[15:30,2]))
+# Create indices of beginning, end and peak of the flood event
+indT <- c(15, 30, 14+which.max(dailyprec[15:30,2])) 
 
+# Run the separation for both methods
 Date1 <- PreconeCP(dailyprec, indT = indT)
 Date2 <- PrectwoCP(dailyprec, indT = indT)
 print(c("Method1" = Date1, "Method2" = Date2))
@@ -76,28 +82,26 @@ print(c("Method1" = Date1, "Method2" = Date2))
 
 
 ### Typing of flood events
-
+For the typing of the flood event, multiple characteristics for each flood event must be calculated before:
+* Sum_SM: Sum of snowmelt during the floodevent in mm
+* Sum_N: Sum of precipitation during the floodevent in mm
+* dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s
+* HQ_dir: Direct peak (instantaneous flood peak minus baseflow) in m³/s
+* PSI_SM: Runoff coefficient of the flood event WITH snowmelt+precipitation
 ```{r}
 # Open the sample flood event data
-library("FloodR")
-
 data("Sample_Flood_events")
 head(Sample_Flood_events)
 
-# Type the floods
-# We need a Flood table with at least the following columns:
-# Sum_SM: Sum of snowmelt during the floodevent in mm
-# Sum_N: Sum of precipitation during the floodevent in mm
-# dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s
-# HQ_dir: Direct peak (instantaneous flood peak minus baseflow) in m³/s
-# PSI_SM: Runoff coefficient of the flood event WITH snowmelt+precipitation
-
+# Run the event typing
 Floods_typed <- Flood_typology(Floods = Sample_Flood_events, n_G = 3, Type_3_min_samplesize = 10)
 
 table(Floods_typed$Type)
+
+# Plot the event typing
 Floods_Rain <- Floods_typed[Floods_typed$Type %in% c("R1", "R2", "R3"),]
 
-library(ggplot2)
+suppressMessages(library(ggplot2))
 ggplot(Floods_Rain)+
   geom_point(aes(x=dir_Volume, y=HQ_dir, fill=Type), colour="black", shape=21, size=2)+
   scale_fill_manual(values = c("R1"="#D7191C", "R2"="#FDAE61", "R3"= "#1A9641"))
@@ -106,18 +110,25 @@ ggplot(Floods_Rain)+
 
 
 ### Typewise and combined return period estimation with the TMPS model
+For the TMPS model, multiple characteristics for each flood event must be present in the input Floods_typed:
+* Peak_date: Date of the peak of the flood event
+* HQ: Direct peak in m³/s
+* Type: Flood type of the flood event, preferably as factor
+
+Also, a Discharge timeseries with a "Date" and "Discharge" is needed
 ```{r}
 # Open the discharge data
-library("FloodR")
-
 data("Discharge")
 head(Discharge)
 
+
 Floods_typed <- Floods_typed[, c("Peak_date","HQ", "Type")]
 
+TMPS_quantiles <- qTMPS(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000), 
+  Flood_events = Floods_typed, Daily_discharge = Discharge, 
+  return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
 
-TMPS_results <- TMPS_model(Floods_typed, Discharge, return_types = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
-
+TMPS_quantiles
 
 # Calculate the AMS with TWO SIMPLIFICATIONS FOR EASYNESS : 
 # 1) no hydrological years 
@@ -126,11 +137,13 @@ TMPS_results <- TMPS_model(Floods_typed, Discharge, return_types = c("TMPS", "R1
 AMS <- aggregate((Discharge$Discharge*1.1), list(as.numeric(format(Discharge$Date,"%Y"))), max, na.rm=TRUE)$x
 
 suppressMessages(library(fExtremes))
-library(reshape2)
+suppressMessages(library(reshape2))
+suppressMessages(library(ggplot2))
+
 AMS_params <- gevFit(AMS, type="pwm")@fit$par.ests  
 AMS <- qgev(1-1/c(2,5,10,20,25,50,100,200,500,1000), mu=AMS_params[2], xi=AMS_params[1], beta=AMS_params[3])
 
-Results <- as.data.frame(rbind(TMPS_results, AMS=AMS))
+Results <- as.data.frame(rbind(TMPS_quantiles, AMS=AMS))
 Results[Results < 0] <- NA
 Results <- cbind(Results, "Method"=rownames(Results))
 Results_melt <- melt(Results, id.vars = "Method", variable.name = "Annuality")
@@ -145,6 +158,15 @@ ggplot(Results_melt)+
   scale_x_log10()+
   labs(x="T[a]",y="Peak discharge [m³/s]")+
   annotation_logticks(sides = "b")
-  
-  
+
+
+
+
+
+# Calculate 
+TMPS_probs_from_AMS_quants <- pTMPS(q = AMS, 
+  Flood_events = Floods_typed, Daily_discharge = Discharge, 
+  return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
+TMPS_probs_from_AMS_quants
+
 ```

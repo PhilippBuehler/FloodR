@@ -1,21 +1,82 @@
-#' Apply the TMPS model to a set of data for a typewise statistical estimate of return periods
-#' as well as a combined TMPS return period. See reference Fischer (2018)
+#' Apply the TMPS model for a typewise statistical estimate of return periods
+#' as well as a combined TMPS return period. See also reference Fischer (2018).
 #'
+#' @param p The points (return periods) where the quantiles should be calculated
+#' Defaults to: 2, 5, 10, 20, 25, 50, 100, 200, 500, 1000
 #' @param Flood_events data.frame: Floods events with the columns "Peak_date" (Date format), "HQ" (numeric) and "Type" (factor)
 #' @param Daily_discharge data.frame: Daily discharge (continuous) with columns "Date (Date format) and "Discharge" (numeric)
-#' @param return_period The points (as years of return period) where the quantiles should be calculated
+#' @param return_TMPS character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes
 #' @param Threshold_Q numeric: Peak of Threshold, defaults to 3
-#' @param return_types character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes
+#' @param p_as_annuality logical: Should all probabilities be treated as an annuality [in years] instead of dimensionless values between 0 and 1
 #' @author Svenja Fischer
 #' @author Philipp Bühler
 #' @references Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
 #' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
+#' @export qTMPS
+qTMPS <- function(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
+  Flood_events, Daily_discharge,
+  return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"),
+  Threshold_Q = 3, p_as_annuality = TRUE){
+
+  if(!p_as_annuality) p <- (-1/(p-1))
+
+
+  Results <- TMPS_model(Flood_events = Flood_events, Daily_discharge = Daily_discharge,
+    p_input = p, q_input = NULL,
+    return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = Threshold_Q)
+
+  return(Results)
+}
+
+
+
+#' Apply the TMPS model for a typewise statistical estimate of return periods
+#' as well as a combined TMPS return period. See also reference Fischer (2018).
+#'
+#' @param q The quantiles for which the return periods should be calculated
+#' Defaults to: 20, 100, 1000
+#' @param Flood_events data.frame: Floods events with the columns "Peak_date" (Date format), "HQ" (numeric) and "Type" (factor)
+#' @param Daily_discharge data.frame: Daily discharge (continuous) with columns "Date (Date format) and "Discharge" (numeric)
+#' @param return_TMPS character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes
+#' @param Threshold_Q numeric: Peak of Threshold, defaults to 3
+#' @param p_as_annuality logical: Should all probabilities be treated as an annuality [in years] instead of dimensionless values between 0 and 1
+#' @author Svenja Fischer
+#' @author Philipp Bühler
+#' @references Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
+#' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
+#' @export pTMPS
+pTMPS <- function(q = c(10, 100, 1000),
+  Flood_events, Daily_discharge,
+  return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"),
+  Threshold_Q = 3, p_as_annuality = TRUE){
+
+  Results <- TMPS_model(Flood_events = Flood_events, Daily_discharge = Daily_discharge,
+    p_input = NULL, q_input = q,
+    return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = Threshold_Q)
+
+  if(!p_as_annuality) Results <- (1-(1/Results))
+
+  return(Results)
+}
+
+
+
+
+#' Apply the TMPS model to a set of data for a typewise statistical estimate of return periods
+#' as well as a combined TMPS return period. See reference Fischer (2018)
+#' @param Flood_events data.frame: Floods events with the columns "Peak_date" (Date format), "HQ" (numeric) and "Type" (factor)
+#' @param Daily_discharge data.frame: Daily discharge (continuous) with columns "Date (Date format) and "Discharge" (numeric)
+#' @param p_input The points (as years of return period) where the quantiles should be calculated
+#' @param q_input Probabilities to calculate the quantiles for
+#' @param Threshold_Q numeric: Peak of Threshold, defaults to 3
+#' @param return_TMPS character vector: What should be returned. Any combination of "TMPS" and the occuring floodtypes
+#' @author Svenja Fischer
+#' @author Philipp Bühler
 #' @import fExtremes
 #' @importFrom tibble has_name
-#' @export TMPS_model
-#'
-TMPS_model <- function(Flood_events, Daily_discharge, return_period = c(2,5,10,20,25,50,100,200,500,1000),
-  return_types = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = 3){
+#' @keywords internal
+TMPS_model <- function(Flood_events, Daily_discharge, return_TMPS, Threshold_Q,
+  p_input = NULL, q_input = NULL){
 
   stopifnot(any(class(Flood_events$Type) %in% c("factor", "character")))
 
@@ -101,34 +162,72 @@ TMPS_model <- function(Flood_events, Daily_discharge, return_period = c(2,5,10,2
 
 
 
-  #return info
-  R <- matrix(NA, nrow = length(return_types), ncol = length(return_period),
-    dimnames = list(return_types, return_period))
+  #return Quantiles
+  if(!is.null(p_input)){
 
-  for(i in seq_along(return_types)){
-    temp_return <- return_types[i]
+    R <- matrix(NA, nrow = length(return_TMPS), ncol = length(p_input),
+      dimnames = list(return_TMPS, p_input))
 
-    if(temp_return %in% g_valid){
+    for(i in seq_along(return_TMPS)){
+      temp_return <- return_TMPS[i]
 
-      R[i,] <- as.numeric(qgev(1-1/return_period,
-        xi=params_POT[[temp_return]][1],
-        beta=params_POT[[temp_return]][2]* lambda[[temp_return]]^params_POT[[temp_return]][1],
-        mu=TH[[temp_return]]-(params_POT[[temp_return]][2] *(1-lambda[[temp_return]]^params_POT[[temp_return]][1]))/
-          params_POT[[temp_return]][1]))
+      if(temp_return %in% g_valid){
 
-    }else if(temp_return %in% g_invalid){
-      R[i,] <- rep(as.numeric(NA), length(return_period))
+        R[i,] <- as.numeric(qgev(1-1/p_input,
+          xi=params_POT[[temp_return]][1],
+          beta=params_POT[[temp_return]][2]* lambda[[temp_return]]^params_POT[[temp_return]][1],
+          mu=TH[[temp_return]]-(params_POT[[temp_return]][2] *(1-lambda[[temp_return]]^params_POT[[temp_return]][1]))/
+            params_POT[[temp_return]][1]))
 
-    }else if(temp_return == "TMPS"){
-      R[i,] <- sapply(return_period, function(x) qPOT_mixmixPOT(x,params_POT, TH, params, antseas, g_valid))
+      }else if(temp_return %in% g_invalid){
+        R[i,] <- rep(as.numeric(NA), length(p_input))
 
-    }else{
-      stop(paste0("No type ", temp_return, " in floodtypes!"))
+      }else if(temp_return == "TMPS"){
+        R[i,] <- sapply(p_input, function(x) qPOT_mixmixPOT(x,params_POT, TH, params, antseas, g_valid))
+
+      }else{
+        stop(paste0("No type ", temp_return, " in floodtypes!"))
+      }
     }
+    return(R)
   }
 
-  return(R)
+
+  # return probabilities
+  if(!is.null(q_input)){
+
+    R <- matrix(NA, nrow = length(return_TMPS), ncol = length(q_input),
+      dimnames = list(return_TMPS, q_input))
+
+    for(i in seq_along(return_TMPS)){
+      temp_return <- return_TMPS[i]
+
+      if(temp_return %in% g_valid){
+
+        ##
+        R[i,] <- as.numeric(1/(1-pgev(q_input,
+          xi=params_POT[[temp_return]][1],
+          beta=params_POT[[temp_return]][2]* lambda[[temp_return]]^params_POT[[temp_return]][1],
+          mu=TH[[temp_return]]-(params_POT[[temp_return]][2] *(1-lambda[[temp_return]]^params_POT[[temp_return]][1]))/
+            params_POT[[temp_return]][1])))
+
+
+      }else if(temp_return %in% g_invalid){
+        R[i,] <- rep(as.numeric(NA), length(q_input))
+
+      }else if(temp_return == "TMPS"){
+        R[i,] <- sapply(q_input, function(y) 1/(1-MixmixPOT(y, params_POT, TH, params, antseas, g_valid)))
+
+      }else{
+        stop(paste0("No type ", temp_return, " in floodtypes!"))
+      }
+    }
+    return(R)
+  }
+
 }
+
+
 
 
 
@@ -179,6 +278,8 @@ optquan_v2<-function(x,Ta,params_POT,TH,params,antseas, AnzT){
   abs((1-mixPOT2(x,params_POT,TH,params,antseas,AnzT))-1/(Ta))
 }
 
+
+
 #' @keywords internal
 mixPOT2<-function(x,params_POT,TH,params,antseas, AnzT){
   res<-1
@@ -190,6 +291,7 @@ mixPOT2<-function(x,params_POT,TH,params,antseas, AnzT){
   }
   return(as.numeric(res))
 }
+
 
 
 #' @keywords internal
