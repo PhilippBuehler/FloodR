@@ -173,7 +173,7 @@ ggplot(Results_melt)+
 
 
 # Calculate 
-TMPS_probs_from_AMS_quants <- pTMPS(q = AMS, 
+TMPS_probs_from_AMS_quants <- pTMPS(q = round(AMS), 
   Flood_events = Floods_typed, Daily_discharge = Discharge, 
   return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"))
 
