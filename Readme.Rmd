@@ -42,7 +42,7 @@ dailyMQ <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
   discharge=rbeta(1462,2,20)*100)
 
 #Run the separation
-Flood_events <- eventsep(dailyMQ, monthlyHQ)
+Flood_events <- eventsep(dailyMQ)
 # The Separation might still contain overlaid flood events which need to be corrected
 head(Flood_events)
 
@@ -68,6 +68,7 @@ For the both functions, a daily precipitation timeseries is needed, as well as  
 dailyprec <- data.frame(Date=seq(from=as.Date("01.01.2000", format="%d.%m.%Y"),
   to=as.Date("30.04.2000", format="%d.%m.%Y"), by="days"),
   discharge=rbeta(121,2,20)*100)
+
 # Create indices of beginning, end and peak of the flood event
 indT <- c(15, 30, 14+which.max(dailyprec[15:30,2])) 
 
