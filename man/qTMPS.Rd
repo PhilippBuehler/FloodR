@@ -34,7 +34,8 @@ as well as a combined TMPS return period. See also reference Fischer (2018).
 }
 \references{
 Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
-event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
+event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847.
+https://doi.org/10.1080/02664763.2018.1441385
 }
 \author{
 Svenja Fischer

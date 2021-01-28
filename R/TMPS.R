@@ -11,7 +11,8 @@
 #' @author Svenja Fischer
 #' @author Philipp Bühler
 #' @references Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
-#' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
+#' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847.
+#' https://doi.org/10.1080/02664763.2018.1441385
 #' @export qTMPS
 qTMPS <- function(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
   Flood_events, Daily_discharge,
@@ -43,7 +44,8 @@ qTMPS <- function(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
 #' @author Svenja Fischer
 #' @author Philipp Bühler
 #' @references Fischer, S. (2018). A seasonal mixed-POT model to estimate high flood quantiles from different
-#' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847. https://doi.org/10.1080/02664763.2018.1441385
+#' event types and seasons. Journal of Applied Statistics, 45(15), 2831–2847.
+#' https://doi.org/10.1080/02664763.2018.1441385
 #' @export pTMPS
 pTMPS <- function(q = c(10, 100, 1000),
   Flood_events, Daily_discharge,

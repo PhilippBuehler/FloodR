@@ -87,9 +87,9 @@ print(c("Method1" = Date1, "Method2" = Date2))
 For the typing of the flood event, multiple characteristics for each flood event must be calculated before:
 
 * Sum_SM: Sum of snowmelt during the floodevent in mm
-* Sum_N: Sum of precipitation during the floodevent in mm
-* dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s
-* HQ_dir: Direct peak (instantaneous flood peak minus baseflow) in m³/s
+* Sum_N: Sum of precipitation during the floodevent in mm (For example from the separation of precipitation)
+* dir_Volume: Direct volume of the flood event (Volume minus baseflow) in Mio. m³/s (This is calculated in the floodevent separation as well as in the output after running the Run_WebFlood)
+* HQ_dir: Direct peak (instantaneous flood peak minus baseflow) in m³/s (This is calculated in the floodevent separation as well as in the output after running the Run_WebFlood)
 * PSI_SM: Runoff coefficient of the flood event WITH snowmelt + precipitation
 
 ```{r}
@@ -122,7 +122,7 @@ For the TMPS model, multiple characteristics for each flood event must be presen
 * HQ: Direct peak in m³/s
 * Type: Flood type of the flood event, preferably as factor
 
-Also, a Discharge timeseries with a "Date" and "Discharge" is needed
+Also, a daily discharge timeseries with a "Date" and "Discharge" column is needed
 
 ```{r}
 # Open the discharge data
@@ -146,6 +146,8 @@ TMPS_quantiles
 
 AMS <- aggregate((Discharge$Discharge*1.1), list(as.numeric(format(Discharge$Date,"%Y"))), max, na.rm=TRUE)$x
 
+
+# Plot the Results and compare it to the AMS
 suppressMessages(library(fExtremes))
 suppressMessages(library(reshape2))
 suppressMessages(library(ggplot2))
