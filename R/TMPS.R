@@ -23,7 +23,7 @@ qTMPS <- function(p = c(2, 5, 10, 20, 25, 50, 100, 200, 500, 1000),
 
   Results <- TMPS_model(Flood_events = Flood_events, Daily_discharge = Daily_discharge,
     p_input = p, q_input = NULL,
-    return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = Threshold_Q)
+    return_TMPS = return_TMPS, Threshold_Q = Threshold_Q)
 
   return(Results)
 }
@@ -52,7 +52,7 @@ pTMPS <- function(q = c(10, 100, 1000),
 
   Results <- TMPS_model(Flood_events = Flood_events, Daily_discharge = Daily_discharge,
     p_input = NULL, q_input = q,
-    return_TMPS = c("TMPS", "R1", "R2", "R3", "S1", "S2"), Threshold_Q = Threshold_Q)
+    return_TMPS = return_TMPS, Threshold_Q = Threshold_Q)
 
   if(!p_as_annuality) Results <- (1-(1/Results))
 
@@ -149,6 +149,7 @@ TMPS_model <- function(Flood_events, Daily_discharge, return_TMPS, Threshold_Q,
 
   antseas <- sapply(n, function(x)  x /Reduce("+", n))
   nyear <- max(Flood_events$Year) - min(Flood_events$Year) + 1
+
   for(i in g_valid){
     params_POT[[i]]<-gpdFit(GG[[i]]$HQ, type="pwm",u=TH[[i]])@fit$par.ests
     params[[i]]<-gevFit(GG[[i]]$HQ, type="pwm")@fit$par.ests
@@ -204,7 +205,6 @@ TMPS_model <- function(Flood_events, Daily_discharge, return_TMPS, Threshold_Q,
 
       if(temp_return %in% g_valid){
 
-        ##
         R[i,] <- as.numeric(1/(1-pgev(q_input,
           xi=params_POT[[temp_return]][1],
           beta=params_POT[[temp_return]][2]* lambda[[temp_return]]^params_POT[[temp_return]][1],
